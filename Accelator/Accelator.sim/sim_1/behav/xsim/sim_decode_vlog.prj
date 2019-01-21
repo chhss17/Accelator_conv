@@ -1,0 +1,29 @@
+# compile verilog/system verilog design source files
+verilog xil_defaultlib  \
+"../../../../Accelator.srcs/sources_1/ip/blk_mem_output_gen/sim/blk_mem_output_gen.v" \
+"../../../../Accelator.srcs/sources_1/ip/blk_mem_act_gen/sim/blk_mem_act_gen.v" \
+"../../../../Accelator.srcs/sources_1/ip/blk_mem_kernel_gen/sim/blk_mem_kernel_gen.v" \
+"../../../../Accelator.srcs/sources_1/ip/parameter_sram/sim/parameter_sram.v" \
+"../../../../Accelator.srcs/sources_1/new/MAX_output_sram.v" \
+"../../../../Accelator.srcs/sources_1/new/comparator2.v" \
+"../../../../Accelator.srcs/sources_1/new/control_logic2.v" \
+"../../../../Accelator.srcs/sources_1/new/controller.v" \
+"../../../../Accelator.srcs/sources_1/new/decode.v" \
+"../../../../Accelator.srcs/sources_1/new/decode_sram.v" \
+"../../../../Accelator.srcs/sources_1/new/input_mux.v" \
+"../../../../Accelator.srcs/sources_1/new/max_reg.v" \
+"../../../../Accelator.srcs/sources_1/new/pe_array.v" \
+"../../../../Accelator.srcs/sources_1/new/pe_unit.v" \
+"../../../../Accelator.srcs/sources_1/new/pool_contorller.v" \
+"../../../../Accelator.srcs/sources_1/new/pooler.v" \
+"../../../../Accelator.srcs/sources_1/new/save_unit.v" \
+"../../../../Accelator.srcs/sources_1/new/shift_reg_act.v" \
+"../../../../Accelator.srcs/sources_1/new/shift_reg_kernel.v" \
+"../../../../Accelator.srcs/sources_1/new/shifter_row.v" \
+"../../../../Accelator.srcs/sim_1/new/sim_decode.v" \
+
+# compile glbl module
+verilog xil_defaultlib "glbl.v"
+
+# Do not sort compile order
+nosort

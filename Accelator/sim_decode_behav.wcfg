@@ -1,0 +1,962 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wave_config>
+   <wave_state>
+   </wave_state>
+   <db_ref_list>
+      <db_ref path="sim_decode_behav.wdb" id="1">
+         <top_modules>
+            <top_module name="glbl" />
+            <top_module name="sim_decode" />
+         </top_modules>
+      </db_ref>
+   </db_ref_list>
+   <zoom_setting>
+      <ZoomStartTime time="1723599503349fs"></ZoomStartTime>
+      <ZoomEndTime time="1724622483259fs"></ZoomEndTime>
+      <Cursor1Time time="1723750000000fs"></Cursor1Time>
+   </zoom_setting>
+   <column_width_setting>
+      <NameColumnWidth column_width="147"></NameColumnWidth>
+      <ValueColumnWidth column_width="83"></ValueColumnWidth>
+   </column_width_setting>
+   <WVObjectSize size="233" />
+   <wvobject type="logic" fp_name="/sim_decode/clk">
+      <obj_property name="ElementShortName">clk</obj_property>
+      <obj_property name="ObjectShortName">clk</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/sim_decode/reset">
+      <obj_property name="ElementShortName">reset</obj_property>
+      <obj_property name="ObjectShortName">reset</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/sim_decode/enable">
+      <obj_property name="ElementShortName">enable</obj_property>
+      <obj_property name="ObjectShortName">enable</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/sim_decode/u_decode_sram/u_decode/clk">
+      <obj_property name="ElementShortName">clk</obj_property>
+      <obj_property name="ObjectShortName">clk</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/sim_decode/u_decode_sram/u_decode/reset">
+      <obj_property name="ElementShortName">reset</obj_property>
+      <obj_property name="ObjectShortName">reset</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/sim_decode/u_decode_sram/u_decode/enable">
+      <obj_property name="ElementShortName">enable</obj_property>
+      <obj_property name="ObjectShortName">enable</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_decode/u_decode_sram/u_decode/data_pc_in">
+      <obj_property name="ElementShortName">data_pc_in[15:0]</obj_property>
+      <obj_property name="ObjectShortName">data_pc_in[15:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/sim_decode/u_decode_sram/u_decode/enable_pc_sram">
+      <obj_property name="ElementShortName">enable_pc_sram</obj_property>
+      <obj_property name="ObjectShortName">enable_pc_sram</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/sim_decode/u_decode_sram/u_decode/wea_pc_sram">
+      <obj_property name="ElementShortName">wea_pc_sram</obj_property>
+      <obj_property name="ObjectShortName">wea_pc_sram</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_decode/u_decode_sram/u_decode/address_pc_sram">
+      <obj_property name="ElementShortName">address_pc_sram[15:0]</obj_property>
+      <obj_property name="ObjectShortName">address_pc_sram[15:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_decode/u_decode_sram/u_decode/size_act">
+      <obj_property name="ElementShortName">size_act[7:0]</obj_property>
+      <obj_property name="ObjectShortName">size_act[7:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_decode/u_decode_sram/u_decode/size_kernel">
+      <obj_property name="ElementShortName">size_kernel[7:0]</obj_property>
+      <obj_property name="ObjectShortName">size_kernel[7:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_decode/u_decode_sram/u_decode/stride">
+      <obj_property name="ElementShortName">stride[7:0]</obj_property>
+      <obj_property name="ObjectShortName">stride[7:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_decode/u_decode_sram/u_decode/number_pc_line">
+      <obj_property name="ElementShortName">number_pc_line[7:0]</obj_property>
+      <obj_property name="ObjectShortName">number_pc_line[7:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_decode/u_decode_sram/u_decode/address_read_base">
+      <obj_property name="ElementShortName">address_read_base[15:0]</obj_property>
+      <obj_property name="ObjectShortName">address_read_base[15:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_decode/u_decode_sram/u_decode/address_write_base">
+      <obj_property name="ElementShortName">address_write_base[15:0]</obj_property>
+      <obj_property name="ObjectShortName">address_write_base[15:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/sim_decode/u_decode_sram/u_decode/enable_controller">
+      <obj_property name="ElementShortName">enable_controller</obj_property>
+      <obj_property name="ObjectShortName">enable_controller</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/sim_decode/u_decode_sram/u_decode/enable_pooler">
+      <obj_property name="ElementShortName">enable_pooler</obj_property>
+      <obj_property name="ObjectShortName">enable_pooler</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_decode/u_decode_sram/u_decode/state">
+      <obj_property name="ElementShortName">state[3:0]</obj_property>
+      <obj_property name="ObjectShortName">state[3:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_decode/u_decode_sram/u_decode/next_state">
+      <obj_property name="ElementShortName">next_state[3:0]</obj_property>
+      <obj_property name="ObjectShortName">next_state[3:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_decode/u_decode_sram/u_decode/model">
+      <obj_property name="ElementShortName">model[7:0]</obj_property>
+      <obj_property name="ObjectShortName">model[7:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_decode/u_decode_sram/u_decode/s0">
+      <obj_property name="ElementShortName">s0[3:0]</obj_property>
+      <obj_property name="ObjectShortName">s0[3:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_decode/u_decode_sram/u_decode/s1">
+      <obj_property name="ElementShortName">s1[3:0]</obj_property>
+      <obj_property name="ObjectShortName">s1[3:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_decode/u_decode_sram/u_decode/s2">
+      <obj_property name="ElementShortName">s2[3:0]</obj_property>
+      <obj_property name="ObjectShortName">s2[3:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_decode/u_decode_sram/u_decode/s3">
+      <obj_property name="ElementShortName">s3[3:0]</obj_property>
+      <obj_property name="ObjectShortName">s3[3:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_decode/u_decode_sram/u_decode/s4">
+      <obj_property name="ElementShortName">s4[3:0]</obj_property>
+      <obj_property name="ObjectShortName">s4[3:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_decode/u_decode_sram/u_decode/s5">
+      <obj_property name="ElementShortName">s5[3:0]</obj_property>
+      <obj_property name="ObjectShortName">s5[3:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_decode/u_decode_sram/u_decode/s6">
+      <obj_property name="ElementShortName">s6[3:0]</obj_property>
+      <obj_property name="ObjectShortName">s6[3:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_decode/u_decode_sram/u_decode/s7">
+      <obj_property name="ElementShortName">s7[3:0]</obj_property>
+      <obj_property name="ObjectShortName">s7[3:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_decode/u_decode_sram/u_decode/s8">
+      <obj_property name="ElementShortName">s8[3:0]</obj_property>
+      <obj_property name="ObjectShortName">s8[3:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_decode/u_decode_sram/u_decode/s9">
+      <obj_property name="ElementShortName">s9[3:0]</obj_property>
+      <obj_property name="ObjectShortName">s9[3:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_decode/u_decode_sram/u_decode/s10">
+      <obj_property name="ElementShortName">s10[3:0]</obj_property>
+      <obj_property name="ObjectShortName">s10[3:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_decode/u_decode_sram/u_decode/s11">
+      <obj_property name="ElementShortName">s11[3:0]</obj_property>
+      <obj_property name="ObjectShortName">s11[3:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_decode/u_decode_sram/u_decode/s12">
+      <obj_property name="ElementShortName">s12[3:0]</obj_property>
+      <obj_property name="ObjectShortName">s12[3:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_decode/u_decode_sram/u_decode/s13">
+      <obj_property name="ElementShortName">s13[3:0]</obj_property>
+      <obj_property name="ObjectShortName">s13[3:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_decode/u_decode_sram/u_decode/s14">
+      <obj_property name="ElementShortName">s14[3:0]</obj_property>
+      <obj_property name="ObjectShortName">s14[3:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_decode/u_decode_sram/u_decode/s15">
+      <obj_property name="ElementShortName">s15[3:0]</obj_property>
+      <obj_property name="ObjectShortName">s15[3:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/sim_decode/u_decode_sram/u_parameter_sram/clka">
+      <obj_property name="ElementShortName">clka</obj_property>
+      <obj_property name="ObjectShortName">clka</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/sim_decode/u_decode_sram/u_parameter_sram/ena">
+      <obj_property name="ElementShortName">ena</obj_property>
+      <obj_property name="ObjectShortName">ena</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_decode/u_decode_sram/u_parameter_sram/wea">
+      <obj_property name="ElementShortName">wea[0:0]</obj_property>
+      <obj_property name="ObjectShortName">wea[0:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_decode/u_decode_sram/u_parameter_sram/addra">
+      <obj_property name="ElementShortName">addra[15:0]</obj_property>
+      <obj_property name="ObjectShortName">addra[15:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_decode/u_decode_sram/u_parameter_sram/dina">
+      <obj_property name="ElementShortName">dina[15:0]</obj_property>
+      <obj_property name="ObjectShortName">dina[15:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_decode/u_decode_sram/u_parameter_sram/douta">
+      <obj_property name="ElementShortName">douta[15:0]</obj_property>
+      <obj_property name="ObjectShortName">douta[15:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/sim_decode/u_decode_sram/u_controller/clk">
+      <obj_property name="ElementShortName">clk</obj_property>
+      <obj_property name="ObjectShortName">clk</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/sim_decode/u_decode_sram/u_controller/reset">
+      <obj_property name="ElementShortName">reset</obj_property>
+      <obj_property name="ObjectShortName">reset</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/sim_decode/u_decode_sram/u_controller/enable">
+      <obj_property name="ElementShortName">enable</obj_property>
+      <obj_property name="ObjectShortName">enable</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/sim_decode/u_decode_sram/u_controller/endsignal_saveunit">
+      <obj_property name="ElementShortName">endsignal_saveunit</obj_property>
+      <obj_property name="ObjectShortName">endsignal_saveunit</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_decode/u_decode_sram/u_controller/size_act">
+      <obj_property name="ElementShortName">size_act[7:0]</obj_property>
+      <obj_property name="ObjectShortName">size_act[7:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_decode/u_decode_sram/u_controller/size_kernel">
+      <obj_property name="ElementShortName">size_kernel[7:0]</obj_property>
+      <obj_property name="ObjectShortName">size_kernel[7:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_decode/u_decode_sram/u_controller/stride">
+      <obj_property name="ElementShortName">stride[7:0]</obj_property>
+      <obj_property name="ObjectShortName">stride[7:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_decode/u_decode_sram/u_controller/number_pc_line">
+      <obj_property name="ElementShortName">number_pc_line[7:0]</obj_property>
+      <obj_property name="ObjectShortName">number_pc_line[7:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_decode/u_decode_sram/u_controller/address_read_base">
+      <obj_property name="ElementShortName">address_read_base[15:0]</obj_property>
+      <obj_property name="ObjectShortName">address_read_base[15:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_decode/u_decode_sram/u_controller/address_act">
+      <obj_property name="ElementShortName">address_act[15:0]</obj_property>
+      <obj_property name="ObjectShortName">address_act[15:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/sim_decode/u_decode_sram/u_controller/enable_act_sram">
+      <obj_property name="ElementShortName">enable_act_sram</obj_property>
+      <obj_property name="ObjectShortName">enable_act_sram</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/sim_decode/u_decode_sram/u_controller/wea_act_sram">
+      <obj_property name="ElementShortName">wea_act_sram</obj_property>
+      <obj_property name="ObjectShortName">wea_act_sram</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_decode/u_decode_sram/u_controller/address_kernel">
+      <obj_property name="ElementShortName">address_kernel[15:0]</obj_property>
+      <obj_property name="ObjectShortName">address_kernel[15:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/sim_decode/u_decode_sram/u_controller/enable_kernel_sram">
+      <obj_property name="ElementShortName">enable_kernel_sram</obj_property>
+      <obj_property name="ObjectShortName">enable_kernel_sram</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/sim_decode/u_decode_sram/u_controller/wea_kernel_sram">
+      <obj_property name="ElementShortName">wea_kernel_sram</obj_property>
+      <obj_property name="ObjectShortName">wea_kernel_sram</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/sim_decode/u_decode_sram/u_controller/enable_pe_array">
+      <obj_property name="ElementShortName">enable_pe_array</obj_property>
+      <obj_property name="ObjectShortName">enable_pe_array</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/sim_decode/u_decode_sram/u_controller/endsignal">
+      <obj_property name="ElementShortName">endsignal</obj_property>
+      <obj_property name="ObjectShortName">endsignal</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_decode/u_decode_sram/u_controller/state">
+      <obj_property name="ElementShortName">state[3:0]</obj_property>
+      <obj_property name="ObjectShortName">state[3:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_decode/u_decode_sram/u_controller/next_state">
+      <obj_property name="ElementShortName">next_state[3:0]</obj_property>
+      <obj_property name="ObjectShortName">next_state[3:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_decode/u_decode_sram/u_controller/count">
+      <obj_property name="ElementShortName">count[7:0]</obj_property>
+      <obj_property name="ObjectShortName">count[7:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_decode/u_decode_sram/u_controller/count_act">
+      <obj_property name="ElementShortName">count_act[7:0]</obj_property>
+      <obj_property name="ObjectShortName">count_act[7:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_decode/u_decode_sram/u_controller/row">
+      <obj_property name="ElementShortName">row[7:0]</obj_property>
+      <obj_property name="ObjectShortName">row[7:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_decode/u_decode_sram/u_controller/column">
+      <obj_property name="ElementShortName">column[7:0]</obj_property>
+      <obj_property name="ObjectShortName">column[7:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_decode/u_decode_sram/u_controller/s0">
+      <obj_property name="ElementShortName">s0[3:0]</obj_property>
+      <obj_property name="ObjectShortName">s0[3:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_decode/u_decode_sram/u_controller/s1">
+      <obj_property name="ElementShortName">s1[3:0]</obj_property>
+      <obj_property name="ObjectShortName">s1[3:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_decode/u_decode_sram/u_controller/s2">
+      <obj_property name="ElementShortName">s2[3:0]</obj_property>
+      <obj_property name="ObjectShortName">s2[3:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_decode/u_decode_sram/u_controller/s3">
+      <obj_property name="ElementShortName">s3[3:0]</obj_property>
+      <obj_property name="ObjectShortName">s3[3:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_decode/u_decode_sram/u_controller/s4">
+      <obj_property name="ElementShortName">s4[3:0]</obj_property>
+      <obj_property name="ObjectShortName">s4[3:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_decode/u_decode_sram/u_controller/s5">
+      <obj_property name="ElementShortName">s5[3:0]</obj_property>
+      <obj_property name="ObjectShortName">s5[3:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_decode/u_decode_sram/u_controller/s6">
+      <obj_property name="ElementShortName">s6[3:0]</obj_property>
+      <obj_property name="ObjectShortName">s6[3:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_decode/u_decode_sram/u_controller/s7">
+      <obj_property name="ElementShortName">s7[3:0]</obj_property>
+      <obj_property name="ObjectShortName">s7[3:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_decode/u_decode_sram/u_controller/s8">
+      <obj_property name="ElementShortName">s8[3:0]</obj_property>
+      <obj_property name="ObjectShortName">s8[3:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_decode/u_decode_sram/u_controller/s9">
+      <obj_property name="ElementShortName">s9[3:0]</obj_property>
+      <obj_property name="ObjectShortName">s9[3:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_decode/u_decode_sram/u_controller/s10">
+      <obj_property name="ElementShortName">s10[3:0]</obj_property>
+      <obj_property name="ObjectShortName">s10[3:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_decode/u_decode_sram/u_controller/s11">
+      <obj_property name="ElementShortName">s11[3:0]</obj_property>
+      <obj_property name="ObjectShortName">s11[3:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_decode/u_decode_sram/u_controller/s12">
+      <obj_property name="ElementShortName">s12[3:0]</obj_property>
+      <obj_property name="ObjectShortName">s12[3:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_decode/u_decode_sram/u_controller/s13">
+      <obj_property name="ElementShortName">s13[3:0]</obj_property>
+      <obj_property name="ObjectShortName">s13[3:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_decode/u_decode_sram/u_controller/s14">
+      <obj_property name="ElementShortName">s14[3:0]</obj_property>
+      <obj_property name="ObjectShortName">s14[3:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_decode/u_decode_sram/u_controller/s15">
+      <obj_property name="ElementShortName">s15[3:0]</obj_property>
+      <obj_property name="ObjectShortName">s15[3:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/sim_decode/u_decode_sram/u_kernel_sram/clka">
+      <obj_property name="ElementShortName">clka</obj_property>
+      <obj_property name="ObjectShortName">clka</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/sim_decode/u_decode_sram/u_kernel_sram/ena">
+      <obj_property name="ElementShortName">ena</obj_property>
+      <obj_property name="ObjectShortName">ena</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_decode/u_decode_sram/u_kernel_sram/wea">
+      <obj_property name="ElementShortName">wea[0:0]</obj_property>
+      <obj_property name="ObjectShortName">wea[0:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_decode/u_decode_sram/u_kernel_sram/addra">
+      <obj_property name="ElementShortName">addra[15:0]</obj_property>
+      <obj_property name="ObjectShortName">addra[15:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_decode/u_decode_sram/u_kernel_sram/dina">
+      <obj_property name="ElementShortName">dina[7:0]</obj_property>
+      <obj_property name="ObjectShortName">dina[7:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_decode/u_decode_sram/u_kernel_sram/douta">
+      <obj_property name="ElementShortName">douta[7:0]</obj_property>
+      <obj_property name="ObjectShortName">douta[7:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/sim_decode/u_decode_sram/u_kernel_shift_reg/clk">
+      <obj_property name="ElementShortName">clk</obj_property>
+      <obj_property name="ObjectShortName">clk</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/sim_decode/u_decode_sram/u_kernel_shift_reg/enable">
+      <obj_property name="ElementShortName">enable</obj_property>
+      <obj_property name="ObjectShortName">enable</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_decode/u_decode_sram/u_kernel_shift_reg/input_data">
+      <obj_property name="ElementShortName">input_data[7:0]</obj_property>
+      <obj_property name="ObjectShortName">input_data[7:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_decode/u_decode_sram/u_kernel_shift_reg/result">
+      <obj_property name="ElementShortName">result[1199:0]</obj_property>
+      <obj_property name="ObjectShortName">result[1199:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/sim_decode/u_decode_sram/u_act_sram/clka">
+      <obj_property name="ElementShortName">clka</obj_property>
+      <obj_property name="ObjectShortName">clka</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/sim_decode/u_decode_sram/u_act_sram/ena">
+      <obj_property name="ElementShortName">ena</obj_property>
+      <obj_property name="ObjectShortName">ena</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_decode/u_decode_sram/u_act_sram/wea">
+      <obj_property name="ElementShortName">wea[0:0]</obj_property>
+      <obj_property name="ObjectShortName">wea[0:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_decode/u_decode_sram/u_act_sram/addra">
+      <obj_property name="ElementShortName">addra[15:0]</obj_property>
+      <obj_property name="ObjectShortName">addra[15:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_decode/u_decode_sram/u_act_sram/dina">
+      <obj_property name="ElementShortName">dina[7:0]</obj_property>
+      <obj_property name="ObjectShortName">dina[7:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_decode/u_decode_sram/u_act_sram/douta">
+      <obj_property name="ElementShortName">douta[7:0]</obj_property>
+      <obj_property name="ObjectShortName">douta[7:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/sim_decode/u_decode_sram/u_act_shift_reg/clk">
+      <obj_property name="ElementShortName">clk</obj_property>
+      <obj_property name="ObjectShortName">clk</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/sim_decode/u_decode_sram/u_act_shift_reg/enable">
+      <obj_property name="ElementShortName">enable</obj_property>
+      <obj_property name="ObjectShortName">enable</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_decode/u_decode_sram/u_act_shift_reg/input_data">
+      <obj_property name="ElementShortName">input_data[7:0]</obj_property>
+      <obj_property name="ObjectShortName">input_data[7:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_decode/u_decode_sram/u_act_shift_reg/result">
+      <obj_property name="ElementShortName">result[199:0]</obj_property>
+      <obj_property name="ObjectShortName">result[199:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_decode/u_decode_sram/u_act_shift_reg/shift_reg_0">
+      <obj_property name="ElementShortName">shift_reg_0[7:0]</obj_property>
+      <obj_property name="ObjectShortName">shift_reg_0[7:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_decode/u_decode_sram/u_act_shift_reg/shift_reg_1">
+      <obj_property name="ElementShortName">shift_reg_1[7:0]</obj_property>
+      <obj_property name="ObjectShortName">shift_reg_1[7:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_decode/u_decode_sram/u_act_shift_reg/shift_reg_2">
+      <obj_property name="ElementShortName">shift_reg_2[7:0]</obj_property>
+      <obj_property name="ObjectShortName">shift_reg_2[7:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_decode/u_decode_sram/u_act_shift_reg/shift_reg_3">
+      <obj_property name="ElementShortName">shift_reg_3[7:0]</obj_property>
+      <obj_property name="ObjectShortName">shift_reg_3[7:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_decode/u_decode_sram/u_act_shift_reg/shift_reg_4">
+      <obj_property name="ElementShortName">shift_reg_4[7:0]</obj_property>
+      <obj_property name="ObjectShortName">shift_reg_4[7:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_decode/u_decode_sram/u_act_shift_reg/shift_reg_5">
+      <obj_property name="ElementShortName">shift_reg_5[7:0]</obj_property>
+      <obj_property name="ObjectShortName">shift_reg_5[7:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_decode/u_decode_sram/u_act_shift_reg/shift_reg_6">
+      <obj_property name="ElementShortName">shift_reg_6[7:0]</obj_property>
+      <obj_property name="ObjectShortName">shift_reg_6[7:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_decode/u_decode_sram/u_act_shift_reg/shift_reg_7">
+      <obj_property name="ElementShortName">shift_reg_7[7:0]</obj_property>
+      <obj_property name="ObjectShortName">shift_reg_7[7:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_decode/u_decode_sram/u_act_shift_reg/shift_reg_8">
+      <obj_property name="ElementShortName">shift_reg_8[7:0]</obj_property>
+      <obj_property name="ObjectShortName">shift_reg_8[7:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_decode/u_decode_sram/u_act_shift_reg/shift_reg_9">
+      <obj_property name="ElementShortName">shift_reg_9[7:0]</obj_property>
+      <obj_property name="ObjectShortName">shift_reg_9[7:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_decode/u_decode_sram/u_act_shift_reg/shift_reg_10">
+      <obj_property name="ElementShortName">shift_reg_10[7:0]</obj_property>
+      <obj_property name="ObjectShortName">shift_reg_10[7:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_decode/u_decode_sram/u_act_shift_reg/shift_reg_11">
+      <obj_property name="ElementShortName">shift_reg_11[7:0]</obj_property>
+      <obj_property name="ObjectShortName">shift_reg_11[7:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_decode/u_decode_sram/u_act_shift_reg/shift_reg_12">
+      <obj_property name="ElementShortName">shift_reg_12[7:0]</obj_property>
+      <obj_property name="ObjectShortName">shift_reg_12[7:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_decode/u_decode_sram/u_act_shift_reg/shift_reg_13">
+      <obj_property name="ElementShortName">shift_reg_13[7:0]</obj_property>
+      <obj_property name="ObjectShortName">shift_reg_13[7:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_decode/u_decode_sram/u_act_shift_reg/shift_reg_14">
+      <obj_property name="ElementShortName">shift_reg_14[7:0]</obj_property>
+      <obj_property name="ObjectShortName">shift_reg_14[7:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_decode/u_decode_sram/u_act_shift_reg/shift_reg_15">
+      <obj_property name="ElementShortName">shift_reg_15[7:0]</obj_property>
+      <obj_property name="ObjectShortName">shift_reg_15[7:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_decode/u_decode_sram/u_act_shift_reg/shift_reg_16">
+      <obj_property name="ElementShortName">shift_reg_16[7:0]</obj_property>
+      <obj_property name="ObjectShortName">shift_reg_16[7:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_decode/u_decode_sram/u_act_shift_reg/shift_reg_17">
+      <obj_property name="ElementShortName">shift_reg_17[7:0]</obj_property>
+      <obj_property name="ObjectShortName">shift_reg_17[7:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_decode/u_decode_sram/u_act_shift_reg/shift_reg_18">
+      <obj_property name="ElementShortName">shift_reg_18[7:0]</obj_property>
+      <obj_property name="ObjectShortName">shift_reg_18[7:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_decode/u_decode_sram/u_act_shift_reg/shift_reg_19">
+      <obj_property name="ElementShortName">shift_reg_19[7:0]</obj_property>
+      <obj_property name="ObjectShortName">shift_reg_19[7:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_decode/u_decode_sram/u_act_shift_reg/shift_reg_20">
+      <obj_property name="ElementShortName">shift_reg_20[7:0]</obj_property>
+      <obj_property name="ObjectShortName">shift_reg_20[7:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_decode/u_decode_sram/u_act_shift_reg/shift_reg_21">
+      <obj_property name="ElementShortName">shift_reg_21[7:0]</obj_property>
+      <obj_property name="ObjectShortName">shift_reg_21[7:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_decode/u_decode_sram/u_act_shift_reg/shift_reg_22">
+      <obj_property name="ElementShortName">shift_reg_22[7:0]</obj_property>
+      <obj_property name="ObjectShortName">shift_reg_22[7:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_decode/u_decode_sram/u_act_shift_reg/shift_reg_23">
+      <obj_property name="ElementShortName">shift_reg_23[7:0]</obj_property>
+      <obj_property name="ObjectShortName">shift_reg_23[7:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_decode/u_decode_sram/u_act_shift_reg/shift_reg_24">
+      <obj_property name="ElementShortName">shift_reg_24[7:0]</obj_property>
+      <obj_property name="ObjectShortName">shift_reg_24[7:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/sim_decode/u_decode_sram/u_save_unit/clk">
+      <obj_property name="ElementShortName">clk</obj_property>
+      <obj_property name="ObjectShortName">clk</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/sim_decode/u_decode_sram/u_save_unit/reset">
+      <obj_property name="ElementShortName">reset</obj_property>
+      <obj_property name="ObjectShortName">reset</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_decode/u_decode_sram/u_save_unit/size_act">
+      <obj_property name="ElementShortName">size_act[7:0]</obj_property>
+      <obj_property name="ObjectShortName">size_act[7:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_decode/u_decode_sram/u_save_unit/size_kernel">
+      <obj_property name="ElementShortName">size_kernel[7:0]</obj_property>
+      <obj_property name="ObjectShortName">size_kernel[7:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_decode/u_decode_sram/u_save_unit/stride">
+      <obj_property name="ElementShortName">stride[7:0]</obj_property>
+      <obj_property name="ObjectShortName">stride[7:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_decode/u_decode_sram/u_save_unit/address_write_base">
+      <obj_property name="ElementShortName">address_write_base[15:0]</obj_property>
+      <obj_property name="ObjectShortName">address_write_base[15:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_decode/u_decode_sram/u_save_unit/enable">
+      <obj_property name="ElementShortName">enable[5:0]</obj_property>
+      <obj_property name="ObjectShortName">enable[5:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_decode/u_decode_sram/u_save_unit/data_result_1">
+      <obj_property name="ElementShortName">data_result_1[15:0]</obj_property>
+      <obj_property name="ObjectShortName">data_result_1[15:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_decode/u_decode_sram/u_save_unit/data_result_2">
+      <obj_property name="ElementShortName">data_result_2[15:0]</obj_property>
+      <obj_property name="ObjectShortName">data_result_2[15:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_decode/u_decode_sram/u_save_unit/data_result_3">
+      <obj_property name="ElementShortName">data_result_3[15:0]</obj_property>
+      <obj_property name="ObjectShortName">data_result_3[15:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_decode/u_decode_sram/u_save_unit/data_result_4">
+      <obj_property name="ElementShortName">data_result_4[15:0]</obj_property>
+      <obj_property name="ObjectShortName">data_result_4[15:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_decode/u_decode_sram/u_save_unit/data_result_5">
+      <obj_property name="ElementShortName">data_result_5[15:0]</obj_property>
+      <obj_property name="ObjectShortName">data_result_5[15:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_decode/u_decode_sram/u_save_unit/data_result_6">
+      <obj_property name="ElementShortName">data_result_6[15:0]</obj_property>
+      <obj_property name="ObjectShortName">data_result_6[15:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_decode/u_decode_sram/u_save_unit/data_in">
+      <obj_property name="ElementShortName">data_in[7:0]</obj_property>
+      <obj_property name="ObjectShortName">data_in[7:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_decode/u_decode_sram/u_save_unit/address">
+      <obj_property name="ElementShortName">address[15:0]</obj_property>
+      <obj_property name="ObjectShortName">address[15:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/sim_decode/u_decode_sram/u_save_unit/enable_sram">
+      <obj_property name="ElementShortName">enable_sram</obj_property>
+      <obj_property name="ObjectShortName">enable_sram</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/sim_decode/u_decode_sram/u_save_unit/wea_sram">
+      <obj_property name="ElementShortName">wea_sram</obj_property>
+      <obj_property name="ObjectShortName">wea_sram</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_decode/u_decode_sram/u_save_unit/data_out">
+      <obj_property name="ElementShortName">data_out[7:0]</obj_property>
+      <obj_property name="ObjectShortName">data_out[7:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/sim_decode/u_decode_sram/u_save_unit/endsignal">
+      <obj_property name="ElementShortName">endsignal</obj_property>
+      <obj_property name="ObjectShortName">endsignal</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_decode/u_decode_sram/u_save_unit/reg_data_result">
+      <obj_property name="ElementShortName">reg_data_result[5:0][15:0]</obj_property>
+      <obj_property name="ObjectShortName">reg_data_result[5:0][15:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_decode/u_decode_sram/u_save_unit/state">
+      <obj_property name="ElementShortName">state[3:0]</obj_property>
+      <obj_property name="ObjectShortName">state[3:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_decode/u_decode_sram/u_save_unit/next_state">
+      <obj_property name="ElementShortName">next_state[3:0]</obj_property>
+      <obj_property name="ObjectShortName">next_state[3:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_decode/u_decode_sram/u_save_unit/count">
+      <obj_property name="ElementShortName">count[2:0]</obj_property>
+      <obj_property name="ObjectShortName">count[2:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_decode/u_decode_sram/u_save_unit/number">
+      <obj_property name="ElementShortName">number[2:0]</obj_property>
+      <obj_property name="ObjectShortName">number[2:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_decode/u_decode_sram/u_save_unit/row">
+      <obj_property name="ElementShortName">row[7:0]</obj_property>
+      <obj_property name="ObjectShortName">row[7:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_decode/u_decode_sram/u_save_unit/column">
+      <obj_property name="ElementShortName">column[7:0]</obj_property>
+      <obj_property name="ObjectShortName">column[7:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_decode/u_decode_sram/u_save_unit/address_init">
+      <obj_property name="ElementShortName">address_init[5:0][15:0]</obj_property>
+      <obj_property name="ObjectShortName">address_init[5:0][15:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_decode/u_decode_sram/u_save_unit/reg_size_feature_map">
+      <obj_property name="ElementShortName">reg_size_feature_map[15:0]</obj_property>
+      <obj_property name="ObjectShortName">reg_size_feature_map[15:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_decode/u_decode_sram/u_save_unit/s0">
+      <obj_property name="ElementShortName">s0[3:0]</obj_property>
+      <obj_property name="ObjectShortName">s0[3:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_decode/u_decode_sram/u_save_unit/s1">
+      <obj_property name="ElementShortName">s1[3:0]</obj_property>
+      <obj_property name="ObjectShortName">s1[3:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_decode/u_decode_sram/u_save_unit/s2">
+      <obj_property name="ElementShortName">s2[3:0]</obj_property>
+      <obj_property name="ObjectShortName">s2[3:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_decode/u_decode_sram/u_save_unit/s3">
+      <obj_property name="ElementShortName">s3[3:0]</obj_property>
+      <obj_property name="ObjectShortName">s3[3:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_decode/u_decode_sram/u_save_unit/s4">
+      <obj_property name="ElementShortName">s4[3:0]</obj_property>
+      <obj_property name="ObjectShortName">s4[3:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_decode/u_decode_sram/u_save_unit/s5">
+      <obj_property name="ElementShortName">s5[3:0]</obj_property>
+      <obj_property name="ObjectShortName">s5[3:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_decode/u_decode_sram/u_save_unit/s6">
+      <obj_property name="ElementShortName">s6[3:0]</obj_property>
+      <obj_property name="ObjectShortName">s6[3:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_decode/u_decode_sram/u_save_unit/s7">
+      <obj_property name="ElementShortName">s7[3:0]</obj_property>
+      <obj_property name="ObjectShortName">s7[3:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_decode/u_decode_sram/u_save_unit/s8">
+      <obj_property name="ElementShortName">s8[3:0]</obj_property>
+      <obj_property name="ObjectShortName">s8[3:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/sim_decode/u_decode_sram/u_output_sram/clka">
+      <obj_property name="ElementShortName">clka</obj_property>
+      <obj_property name="ObjectShortName">clka</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/sim_decode/u_decode_sram/u_output_sram/ena">
+      <obj_property name="ElementShortName">ena</obj_property>
+      <obj_property name="ObjectShortName">ena</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_decode/u_decode_sram/u_output_sram/wea">
+      <obj_property name="ElementShortName">wea[0:0]</obj_property>
+      <obj_property name="ObjectShortName">wea[0:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_decode/u_decode_sram/u_output_sram/addra">
+      <obj_property name="ElementShortName">addra[15:0]</obj_property>
+      <obj_property name="ObjectShortName">addra[15:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_decode/u_decode_sram/u_output_sram/dina">
+      <obj_property name="ElementShortName">dina[7:0]</obj_property>
+      <obj_property name="ObjectShortName">dina[7:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_decode/u_decode_sram/u_output_sram/douta">
+      <obj_property name="ElementShortName">douta[7:0]</obj_property>
+      <obj_property name="ObjectShortName">douta[7:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/sim_decode/u_decode_sram/u_pooler/clk">
+      <obj_property name="ElementShortName">clk</obj_property>
+      <obj_property name="ObjectShortName">clk</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/sim_decode/u_decode_sram/u_pooler/reset">
+      <obj_property name="ElementShortName">reset</obj_property>
+      <obj_property name="ObjectShortName">reset</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/sim_decode/u_decode_sram/u_pooler/enable">
+      <obj_property name="ElementShortName">enable</obj_property>
+      <obj_property name="ObjectShortName">enable</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_decode/u_decode_sram/u_pooler/size_act">
+      <obj_property name="ElementShortName">size_act[7:0]</obj_property>
+      <obj_property name="ObjectShortName">size_act[7:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_decode/u_decode_sram/u_pooler/size_kernel">
+      <obj_property name="ElementShortName">size_kernel[7:0]</obj_property>
+      <obj_property name="ObjectShortName">size_kernel[7:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_decode/u_decode_sram/u_pooler/number_feature">
+      <obj_property name="ElementShortName">number_feature[7:0]</obj_property>
+      <obj_property name="ObjectShortName">number_feature[7:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_decode/u_decode_sram/u_pooler/data_in">
+      <obj_property name="ElementShortName">data_in[7:0]</obj_property>
+      <obj_property name="ObjectShortName">data_in[7:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_decode/u_decode_sram/u_pooler/address_read">
+      <obj_property name="ElementShortName">address_read[15:0]</obj_property>
+      <obj_property name="ObjectShortName">address_read[15:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/sim_decode/u_decode_sram/u_pooler/enable_read_sram">
+      <obj_property name="ElementShortName">enable_read_sram</obj_property>
+      <obj_property name="ObjectShortName">enable_read_sram</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/sim_decode/u_decode_sram/u_pooler/wea_read_sram">
+      <obj_property name="ElementShortName">wea_read_sram</obj_property>
+      <obj_property name="ObjectShortName">wea_read_sram</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_decode/u_decode_sram/u_pooler/address_write">
+      <obj_property name="ElementShortName">address_write[15:0]</obj_property>
+      <obj_property name="ObjectShortName">address_write[15:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/sim_decode/u_decode_sram/u_pooler/enable_write_sram">
+      <obj_property name="ElementShortName">enable_write_sram</obj_property>
+      <obj_property name="ObjectShortName">enable_write_sram</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/sim_decode/u_decode_sram/u_pooler/wea_write_sram">
+      <obj_property name="ElementShortName">wea_write_sram</obj_property>
+      <obj_property name="ObjectShortName">wea_write_sram</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_decode/u_decode_sram/u_pooler/data_out">
+      <obj_property name="ElementShortName">data_out[7:0]</obj_property>
+      <obj_property name="ObjectShortName">data_out[7:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/sim_decode/u_decode_sram/u_pooler/endsignal">
+      <obj_property name="ElementShortName">endsignal</obj_property>
+      <obj_property name="ObjectShortName">endsignal</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_decode/u_decode_sram/u_pooler/state">
+      <obj_property name="ElementShortName">state[3:0]</obj_property>
+      <obj_property name="ObjectShortName">state[3:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_decode/u_decode_sram/u_pooler/next_state">
+      <obj_property name="ElementShortName">next_state[3:0]</obj_property>
+      <obj_property name="ObjectShortName">next_state[3:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_decode/u_decode_sram/u_pooler/count">
+      <obj_property name="ElementShortName">count[15:0]</obj_property>
+      <obj_property name="ObjectShortName">count[15:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_decode/u_decode_sram/u_pooler/wire_data_out">
+      <obj_property name="ElementShortName">wire_data_out[7:0]</obj_property>
+      <obj_property name="ObjectShortName">wire_data_out[7:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/sim_decode/u_decode_sram/u_pooler/wire_valid_op">
+      <obj_property name="ElementShortName">wire_valid_op</obj_property>
+      <obj_property name="ObjectShortName">wire_valid_op</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/sim_decode/u_decode_sram/u_pooler/wire_endsignal">
+      <obj_property name="ElementShortName">wire_endsignal</obj_property>
+      <obj_property name="ObjectShortName">wire_endsignal</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_decode/u_decode_sram/u_pooler/s0">
+      <obj_property name="ElementShortName">s0[3:0]</obj_property>
+      <obj_property name="ObjectShortName">s0[3:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_decode/u_decode_sram/u_pooler/s1">
+      <obj_property name="ElementShortName">s1[3:0]</obj_property>
+      <obj_property name="ObjectShortName">s1[3:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_decode/u_decode_sram/u_pooler/s2">
+      <obj_property name="ElementShortName">s2[3:0]</obj_property>
+      <obj_property name="ObjectShortName">s2[3:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_decode/u_decode_sram/u_pooler/s3">
+      <obj_property name="ElementShortName">s3[3:0]</obj_property>
+      <obj_property name="ObjectShortName">s3[3:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_decode/u_decode_sram/u_pooler/s4">
+      <obj_property name="ElementShortName">s4[3:0]</obj_property>
+      <obj_property name="ObjectShortName">s4[3:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_decode/u_decode_sram/u_pooler/s5">
+      <obj_property name="ElementShortName">s5[3:0]</obj_property>
+      <obj_property name="ObjectShortName">s5[3:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_decode/u_decode_sram/u_pooler/s6">
+      <obj_property name="ElementShortName">s6[3:0]</obj_property>
+      <obj_property name="ObjectShortName">s6[3:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_decode/u_decode_sram/u_pooler/s7">
+      <obj_property name="ElementShortName">s7[3:0]</obj_property>
+      <obj_property name="ObjectShortName">s7[3:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_decode/u_decode_sram/u_pooler/s8">
+      <obj_property name="ElementShortName">s8[3:0]</obj_property>
+      <obj_property name="ObjectShortName">s8[3:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_decode/u_decode_sram/u_pooler/s9">
+      <obj_property name="ElementShortName">s9[3:0]</obj_property>
+      <obj_property name="ObjectShortName">s9[3:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_decode/u_decode_sram/u_pooler/s10">
+      <obj_property name="ElementShortName">s10[3:0]</obj_property>
+      <obj_property name="ObjectShortName">s10[3:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_decode/u_decode_sram/u_pooler/s11">
+      <obj_property name="ElementShortName">s11[3:0]</obj_property>
+      <obj_property name="ObjectShortName">s11[3:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_decode/u_decode_sram/u_pooler/s12">
+      <obj_property name="ElementShortName">s12[3:0]</obj_property>
+      <obj_property name="ObjectShortName">s12[3:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_decode/u_decode_sram/u_pooler/s13">
+      <obj_property name="ElementShortName">s13[3:0]</obj_property>
+      <obj_property name="ObjectShortName">s13[3:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_decode/u_decode_sram/u_pooler/s14">
+      <obj_property name="ElementShortName">s14[3:0]</obj_property>
+      <obj_property name="ObjectShortName">s14[3:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_decode/u_decode_sram/u_pooler/s15">
+      <obj_property name="ElementShortName">s15[3:0]</obj_property>
+      <obj_property name="ObjectShortName">s15[3:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/sim_decode/u_decode_sram/u_pooler/u_pooler/clk">
+      <obj_property name="ElementShortName">clk</obj_property>
+      <obj_property name="ObjectShortName">clk</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/sim_decode/u_decode_sram/u_pooler/u_pooler/enable">
+      <obj_property name="ElementShortName">enable</obj_property>
+      <obj_property name="ObjectShortName">enable</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/sim_decode/u_decode_sram/u_pooler/u_pooler/master_rst">
+      <obj_property name="ElementShortName">master_rst</obj_property>
+      <obj_property name="ObjectShortName">master_rst</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_decode/u_decode_sram/u_pooler/u_pooler/size_act">
+      <obj_property name="ElementShortName">size_act[7:0]</obj_property>
+      <obj_property name="ObjectShortName">size_act[7:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_decode/u_decode_sram/u_pooler/u_pooler/size_pool_kernel">
+      <obj_property name="ElementShortName">size_pool_kernel[7:0]</obj_property>
+      <obj_property name="ObjectShortName">size_pool_kernel[7:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_decode/u_decode_sram/u_pooler/u_pooler/num_feature">
+      <obj_property name="ElementShortName">num_feature[7:0]</obj_property>
+      <obj_property name="ObjectShortName">num_feature[7:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_decode/u_decode_sram/u_pooler/u_pooler/data_in">
+      <obj_property name="ElementShortName">data_in[7:0]</obj_property>
+      <obj_property name="ObjectShortName">data_in[7:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_decode/u_decode_sram/u_pooler/u_pooler/data_out">
+      <obj_property name="ElementShortName">data_out[7:0]</obj_property>
+      <obj_property name="ObjectShortName">data_out[7:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/sim_decode/u_decode_sram/u_pooler/u_pooler/valid_op">
+      <obj_property name="ElementShortName">valid_op</obj_property>
+      <obj_property name="ObjectShortName">valid_op</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/sim_decode/u_decode_sram/u_pooler/u_pooler/end_pool">
+      <obj_property name="ElementShortName">end_pool</obj_property>
+      <obj_property name="ObjectShortName">end_pool</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/sim_decode/u_decode_sram/u_pooler/u_pooler/rst_m">
+      <obj_property name="ElementShortName">rst_m</obj_property>
+      <obj_property name="ObjectShortName">rst_m</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/sim_decode/u_decode_sram/u_pooler/u_pooler/load_sr">
+      <obj_property name="ElementShortName">load_sr</obj_property>
+      <obj_property name="ObjectShortName">load_sr</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/sim_decode/u_decode_sram/u_pooler/u_pooler/global_rst">
+      <obj_property name="ElementShortName">global_rst</obj_property>
+      <obj_property name="ObjectShortName">global_rst</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_decode/u_decode_sram/u_pooler/u_pooler/sel">
+      <obj_property name="ElementShortName">sel[1:0]</obj_property>
+      <obj_property name="ObjectShortName">sel[1:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_decode/u_decode_sram/u_pooler/u_pooler/comp_op">
+      <obj_property name="ElementShortName">comp_op[7:0]</obj_property>
+      <obj_property name="ObjectShortName">comp_op[7:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_decode/u_decode_sram/u_pooler/u_pooler/shift_out">
+      <obj_property name="ElementShortName">shift_out[7:0]</obj_property>
+      <obj_property name="ObjectShortName">shift_out[7:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_decode/u_decode_sram/u_pooler/u_pooler/reg_op">
+      <obj_property name="ElementShortName">reg_op[7:0]</obj_property>
+      <obj_property name="ObjectShortName">reg_op[7:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_decode/u_decode_sram/u_pooler/u_pooler/mux_out">
+      <obj_property name="ElementShortName">mux_out[7:0]</obj_property>
+      <obj_property name="ObjectShortName">mux_out[7:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_decode/u_decode_sram/u_pooler/u_pooler/data_in_temp">
+      <obj_property name="ElementShortName">data_in_temp[7:0]</obj_property>
+      <obj_property name="ObjectShortName">data_in_temp[7:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_decode/u_decode_sram/u_pooler/u_pooler/num_feature_tmp">
+      <obj_property name="ElementShortName">num_feature_tmp[31:0]</obj_property>
+      <obj_property name="ObjectShortName">num_feature_tmp[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_decode/u_decode_sram/u_pooler/u_pooler/ce">
+      <obj_property name="ElementShortName">ce[31:0]</obj_property>
+      <obj_property name="ObjectShortName">ce[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_decode/u_decode_sram/u_pooler/u_pooler/temp">
+      <obj_property name="ElementShortName">temp[7:0]</obj_property>
+      <obj_property name="ObjectShortName">temp[7:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/sim_decode/u_decode_sram/u_pooler/u_pooler/temp_rst">
+      <obj_property name="ElementShortName">temp_rst</obj_property>
+      <obj_property name="ObjectShortName">temp_rst</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_decode/u_decode_sram/u_pooler/u_pooler/comparator1/ip1">
+      <obj_property name="ElementShortName">ip1[7:0]</obj_property>
+      <obj_property name="ObjectShortName">ip1[7:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_decode/u_decode_sram/u_pooler/u_pooler/comparator1/ip2">
+      <obj_property name="ElementShortName">ip2[7:0]</obj_property>
+      <obj_property name="ObjectShortName">ip2[7:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_decode/u_decode_sram/u_pooler/u_pooler/comparator1/comp_op">
+      <obj_property name="ElementShortName">comp_op[7:0]</obj_property>
+      <obj_property name="ObjectShortName">comp_op[7:0]</obj_property>
+   </wvobject>
+</wave_config>

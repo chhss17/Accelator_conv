@@ -1,0 +1,14 @@
+# compile verilog/system verilog design source files
+verilog xil_defaultlib  \
+"../../../../Accelator.srcs/sources_1/new/pool/sources/comparator2.v" \
+"../../../../Accelator.srcs/sources_1/new/pool/sources/control_logic2.v" \
+"../../../../Accelator.srcs/sources_1/new/pool/sources/input_mux.v" \
+"../../../../Accelator.srcs/sources_1/new/pool/sources/max_reg.v" \
+"../../../../Accelator.srcs/sources_1/new/pool/sources/shifter_row.v" \
+"../../../../Accelator.srcs/sources_1/new/pool/sources/pooler.v" \
+
+# compile glbl module
+verilog xil_defaultlib "glbl.v"
+
+# Do not sort compile order
+nosort
