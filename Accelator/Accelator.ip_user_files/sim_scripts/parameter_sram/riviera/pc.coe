@@ -1,8 +1,0 @@
-memory_initialization_radix=10;
-memory_initialization_vector=
-288,1377,0,0
-540,518
-270,1377,0,0
-270,1377,196,0
-270,1377,392,0
-65280;

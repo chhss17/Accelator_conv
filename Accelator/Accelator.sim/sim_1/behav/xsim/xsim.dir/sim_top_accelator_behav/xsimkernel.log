@@ -1,7 +1,0 @@
-Running: xsim.dir/sim_top_accelator_behav/xsimk -simmode gui -wdb sim_top_accelator_behav.wdb -simrunnum 0 -socket 44360
-Design successfully loaded
-Design Loading Memory Usage: 49264 KB (Peak: 49264 KB)
-Design Loading CPU Usage: 30 ms
-Simulation completed
-Simulation Memory Usage: 135708 KB (Peak: 196536 KB)
-Simulation CPU Usage: 260 ms

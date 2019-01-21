@@ -1,6 +1,0 @@
-verilog xil_defaultlib  \
-"../../../../Accelator.srcs/sources_1/ip/parameter_sram/sim/parameter_sram.v" \
-
-verilog xil_defaultlib "glbl.v"
-
-nosort

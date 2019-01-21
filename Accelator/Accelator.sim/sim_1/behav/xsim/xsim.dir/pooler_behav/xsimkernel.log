@@ -1,7 +1,0 @@
-Running: xsim.dir/pooler_behav/xsimk -simmode gui -wdb pooler_behav.wdb -simrunnum 0 -socket 42506
-Design successfully loaded
-Design Loading Memory Usage: 47016 KB (Peak: 47136 KB)
-Design Loading CPU Usage: 50 ms
-Simulation completed
-Simulation Memory Usage: 129780 KB (Peak: 194288 KB)
-Simulation CPU Usage: 70 ms
