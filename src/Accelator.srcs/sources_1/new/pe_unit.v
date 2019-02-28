@@ -18,11 +18,11 @@
 // Additional Comments:
 // 
 //////////////////////////////////////////////////////////////////////////////////
-
+`include "defines.v"
 
 module pe_unit(
     input  					clk, 
-    input 					reset,
+    input 					rst_n,
     input					enable,
     input  		[15:0]		kernel,////
     input  		[15:0]		act,
@@ -36,51 +36,60 @@ reg				[1:0]		state;
 reg				[1:0]		next_state;
 reg				[31:0]		reg_psum_in;
 
-always@(posedge clk or posedge reset)
+always@(posedge clk or negedge rst_n)
 begin
-	if(reset) begin
-		state <= 2'b00;
+	if(rst_n == 1'b0) begin
+		state 		<= 2'b00;
 	end
 	else begin
-		state <= next_state;
+		state 		<= next_state;
 	end
 end
 
 always@(*)
 begin
+	next_state 				=	state;
 	if(state == 2'b00) begin
 		if (!enable) begin
-			next_state <= 2'b00;
+			next_state 		= 2'b00;
 		end
 		else begin
-			next_state <= 2'b01;
+			next_state 		= 2'b01;
 		end
 	end
 	else if(state == 2'b01) begin
-		next_state <= 2'b10;
+		next_state 			= 2'b10;
 	end
 	else begin
-		next_state <= 2'b00;
+		next_state 			= 2'b00;
 	end
 end
 
-always@(*)
+always@(posedge clk or negedge rst_n)
 begin
-	case(state)
-	2'b00	:begin
-				psum_out = 0;
-				end_signal = 1'b0;
-				reg_psum_in = psum_in;
-			end
-	2'b01 	:begin
-				psum_out = $signed(kernel)*$signed(act);
-				end_signal = 1'b0;
-			end
-	2'b10 	:begin
-				psum_out = $signed(psum_out) + $signed(reg_psum_in);
-				end_signal = 1'b1;
-			end
-	endcase
+	if(!rst_n)	begin
+		reg_psum_in 			<= 8'h00;
+		end_signal 				<= `UnFinish;
+	end
+	else begin
+		case(state)
+		2'b00	:begin
+					reg_psum_in <= psum_in;
+					end_signal	<= `UnFinish;
+					psum_out 	<= 32'h00000000;
+					
+				end
+		2'b01 	:begin
+					psum_out 	<= $signed(kernel)*$signed(act);
+					end_signal 	<= `UnFinish;
+				end
+		2'b10 	:begin
+					psum_out 	<= $signed(psum_out) + $signed(reg_psum_in);
+					end_signal 	<= `Finish;
+				end
+		endcase
+	end
+	
 end
 
 endmodule

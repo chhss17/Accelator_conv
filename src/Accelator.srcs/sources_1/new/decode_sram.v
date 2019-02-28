@@ -22,7 +22,7 @@
 
 module decode_sram(
 	input 				clk,
-	input 				reset,
+	input 				rst_n,
 	input 				enable
     );
 wire 		[15:0]		wire_pc_sram_to_decode;
@@ -114,9 +114,9 @@ reg 		[15:0]		reg_dataout_act_sram;
 reg 		[15:0]		reg_dataout_kernel_sram;
 
 
-always@(posedge clk or reset)
+always@(posedge clk or negedge rst_n)
 begin
-	if(reset)	begin
+	if(rst_n)	begin
 		reg_pc_sram_data_in				<=	16'h00;
 		reg_act_sram_data_in			<=	16'h00;
 		reg_kernel_sram_data_in			<=	16'h00;
@@ -159,8 +159,8 @@ end
 //	decode
 decode 	u_decode(
 	.clk 				(clk),
-	.reset 				(reset),
-	.enable				((wire_endsignal_contorller||wire_endsignal_pooler)),
+	.rst_n 				(rst_n),
+	.enable				((enable||wire_endsignal_contorller||wire_endsignal_pooler)),
 	.data_pc_in 		(wire_pc_sram_to_decode),
 
 	.enable_pc_sram 	(wire_enable_pc_sram),
@@ -192,7 +192,7 @@ parameter_sram 	u_parameter_sram(
 //	controller
 controller 	u_controller(
 	.clk 					(clk),
-	.reset					(reset),
+	.rst_n					(rst_n),
 
 	.enable 				(wire_enable_controller),
 	.endsignal_saveunit 	(wire_enable_endsignal_saveunit),
@@ -225,7 +225,7 @@ blk_mem_kernel_gen u_kernel_sram(
 
 shift_reg_kernel 	u_kernel_shift_reg(
 	.clk 					(clk),
-	.reset 					(reset),
+	.rst_n 					(rst_n),
 	.enable 				(reg_enable_kernel_shiftreg),
 	.input_data 			(reg_dataout_kernel_sram),
 	.result 				(wire_kernel_shift_reg_data_out));
@@ -242,7 +242,7 @@ blk_mem_act_gen	u_act_sram(
 
 shift_reg_act	u_act_shift_reg(
 	.clk					(clk),
-	.reset 					(reset),
+	.rst_n 					(rst_n),
 	.enable 				(reg_enable_act_shiftreg),
 	.input_data				(reg_dataout_act_sram),
 	.result					(wire_act_shift_reg_data_out));
@@ -250,7 +250,7 @@ shift_reg_act	u_act_shift_reg(
 //	pe array
 pe_array 	u_pe_array(
 	.clk					(clk),
-	.reset					(reset),
+	.rst_n					(rst_n),
 	.enable 				(wire_enable_pe_array),
 	.enable_1				(enable_pe_array_line[0]),
 	.enable_2				(enable_pe_array_line[1]),
@@ -258,6 +258,12 @@ pe_array 	u_pe_array(
 	.enable_4				(enable_pe_array_line[3]),
 	.enable_5				(enable_pe_array_line[4]),
 	.enable_6				(enable_pe_array_line[5]),
+	// .kernel_1 				(wire_kernel_shift_reg_data_out[2495:2096]),
+	// .kernel_2				(wire_kernel_shift_reg_data_out[2079:1680]),
+	// .kernel_3 				(wire_kernel_shift_reg_data_out[1663:1264]),
+	// .kernel_4 				(wire_kernel_shift_reg_data_out[1247:848]),
+	// .kernel_5 				(wire_kernel_shift_reg_data_out[831:432]),
+	// .kernel_6 				(wire_kernel_shift_reg_data_out[415:16]),
 	.kernel_1 				(wire_kernel_shift_reg_data_out[415:16]),
 	.kernel_2				(wire_kernel_shift_reg_data_out[831:432]),
 	.kernel_3 				(wire_kernel_shift_reg_data_out[1247:848]),
@@ -265,6 +271,12 @@ pe_array 	u_pe_array(
 	.kernel_5 				(wire_kernel_shift_reg_data_out[2079:1680]),
 	.kernel_6 				(wire_kernel_shift_reg_data_out[2495:2096]),
 	.act 					(wire_act_shift_reg_data_out),
+	// .psum_in_1				((wire_kernel_shift_reg_data_out[2095]== 1'b0)?{1'b0,reg_pe_array_psum_in_0[15:0],wire_kernel_shift_reg_data_out[2094:2080]}:{1'b1,reg_pe_array_psum_in_1[15:0],wire_kernel_shift_reg_data_out[2094:2080]}),
+	// .psum_in_2				((wire_kernel_shift_reg_data_out[1679]== 1'b0)?{1'b0,reg_pe_array_psum_in_0[15:0],wire_kernel_shift_reg_data_out[1678:1664]}:{1'b1,reg_pe_array_psum_in_1[15:0],wire_kernel_shift_reg_data_out[1678:1664]}),
+	// .psum_in_3				((wire_kernel_shift_reg_data_out[1263]== 1'b0)?{1'b0,reg_pe_array_psum_in_0[15:0],wire_kernel_shift_reg_data_out[1262:1248]}:{1'b1,reg_pe_array_psum_in_1[15:0],wire_kernel_shift_reg_data_out[1262:1248]}),
+	// .psum_in_4				((wire_kernel_shift_reg_data_out[847] == 1'b0)?{1'b0,reg_pe_array_psum_in_0[15:0],wire_kernel_shift_reg_data_out[846:832]}:{1'b1,reg_pe_array_psum_in_1[15:0],wire_kernel_shift_reg_data_out[846:832]}),
+	// .psum_in_5				((wire_kernel_shift_reg_data_out[431] == 1'b0)?{1'b0,reg_pe_array_psum_in_0[15:0],wire_kernel_shift_reg_data_out[430:416]}:{1'b1,reg_pe_array_psum_in_1[15:0],wire_kernel_shift_reg_data_out[430:416]}),
+	// .psum_in_6				((wire_kernel_shift_reg_data_out[15] == 1'b0)?{1'b0,reg_pe_array_psum_in_0[15:0],wire_kernel_shift_reg_data_out[14:0]}:{1'b1,reg_pe_array_psum_in_1[15:0],wire_kernel_shift_reg_data_out[14:0]}),
 	.psum_in_1				((wire_kernel_shift_reg_data_out[15] == 1'b0)?{1'b0,reg_pe_array_psum_in_0[15:0],wire_kernel_shift_reg_data_out[14:0]}:{1'b1,reg_pe_array_psum_in_1[15:0],wire_kernel_shift_reg_data_out[14:0]}),
 	.psum_in_2				((wire_kernel_shift_reg_data_out[431] == 1'b0)?{1'b0,reg_pe_array_psum_in_0[15:0],wire_kernel_shift_reg_data_out[430:416]}:{1'b1,reg_pe_array_psum_in_1[15:0],wire_kernel_shift_reg_data_out[430:416]}),
 	.psum_in_3				((wire_kernel_shift_reg_data_out[847] == 1'b0)?{1'b0,reg_pe_array_psum_in_0[15:0],wire_kernel_shift_reg_data_out[846:832]}:{1'b1,reg_pe_array_psum_in_1[15:0],wire_kernel_shift_reg_data_out[846:832]}),
@@ -287,10 +299,9 @@ pe_array 	u_pe_array(
 //	save unit
 save_unit	u_save_unit(
 	.clk 					(clk),
-	.reset 					(reset),
+	.rst_n 					(rst_n),
 	.size_act 				(wire_size_act),
 	.size_kernel 			(wire_size_kernel),
-	.stride 				(wire_stride),
 	.address_write_base 	(wire_address_write_base),
 	.enable 				({wire_pe_array_end_signal_1,wire_pe_array_end_signal_2,wire_pe_array_end_signal_3,wire_pe_array_end_signal_4,wire_pe_array_end_signal_5,wire_pe_array_end_signal_6}),
 	.data_result_1 			(wire_pe_array_pe_array_result_1),
@@ -345,9 +356,9 @@ MAX_output_sram 	u_max_act_sram(
 	.address 				(wire_address_act_sram));
 
 
-pooler_controller 	u_pooler(
+pooler_controller 	u_pooler_controller(
 	.clk 					(clk),
-	.reset 					(reset),
+	.rst_n 					(rst_n),
 	.enable 				(wire_enable_pooler),
 
 	.size_act 				(wire_size_act),

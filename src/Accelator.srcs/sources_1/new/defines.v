@@ -3,9 +3,9 @@
 // Company: 
 // Engineer: 
 // 
-// Create Date: 2019/02/22 16:39:24
+// Create Date: 02/25/2019 07:40:31 PM
 // Design Name: 
-// Module Name: sign_multi
+// Module Name: defines
 // Project Name: 
 // Target Devices: 
 // Tool Versions: 
@@ -20,16 +20,17 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 
-module sign_multi(
-	input 				clk,
-	input 		[15:0]	ina,
-	input		[15:0]	inb,
+//*********************		SRAM 	*****************//
+`define 	SramEnable 			1'b1		
+`define 	SramDisable 		1'b0
+`define 	SramRead 			1'b0
+`define 	SramWrite 			1'b1
 
-	output 		[31:0]	outa
-    );
 
-wire 			[31:0]	outa;
 
-assign outa = $signed(ina) + $signed(inb);
+//*********************		GLOBAL 	****************//
+`define 	Finish 		 		1'b1
+`define 	UnFinish 			1'b0
 
-endmodule
+`define 	UnitEnable 			1'b1
+`define 	UnitDisable 		1'b0

@@ -18,11 +18,13 @@
 // Additional Comments:
 // 
 //////////////////////////////////////////////////////////////////////////////////
+`include "defines.v"
 
+`define  Isenable(enable) 		(enable == 1'b1)
 
 module controller(
 	input 					clk,
-	input					reset,
+	input					rst_n,
 	input 					enable,
 	input 					endsignal_saveunit,
 
@@ -46,204 +48,231 @@ module controller(
 
 reg 				[3:0]	state;
 reg 				[3:0]	next_state;
-reg 				[7:0]	count;
-reg 				[7:0]	count_act;
+reg 				[15:0]	count;
+reg 				[15:0]	count_act;
 
 reg					[7:0]	row;
 reg					[7:0]	column;
 
-localparam			[3:0]	s0 	= 4'b0000,
-							s1 	= 4'b0001,
-							s2 	= 4'b0010,
-							s3 	= 4'b0011,
-							s4 	= 4'b0100,
-							s5 	= 4'b0101,
-							s6 	= 4'b0110,
-							s7 	= 4'b0111,
-							s8 	= 4'b1000,
-							s9 	= 4'b1001,
-							s10	= 4'b1010,
-							s11	= 4'b1011,
-							s12	= 4'b1100,
-							s13	= 4'b1101,
-							s14	= 4'b1110,
-							s15	= 4'b1111;
+localparam 					ENABLE_EN = 1'b1;
+localparam 					ENABLE_UN = 1'b0;
 
-always@(posedge reset or posedge clk)
+localparam			[3:0]	
+				READ_KER 				= 4'b0000,
+				READ_ACT_ONE 			= 4'b0001,
+				CACULATE 				= 4'b0010,
+				READ_ACT_TWO 			= 4'b0011,
+				WAIT_ONE 				= 4'b0100,
+				WAIT_TWO 				= 4'b0101,
+				WAIT_THR 				= 4'b0110,
+				FINISH 					= 4'b0111,
+				UNIT_PRE				= 4'b1111;
+
+always@(negedge rst_n or posedge clk)
 begin
-	if(reset)	begin
-		address_act					<=	16'hffff;
-		enable_act_sram				<=	1'b0;
-		wea_act_sram 				<=	1'b0;
-
-		address_kernel				<=	16'hffff;
-		enable_kernel_sram			<=	1'b0;
-		wea_kernel_sram 			<=	1'b0;
-		
-		enable_pe_array				<= 	1'b0;
-		endsignal 					<=	1'b0;
-
-		state						<=	s15;
-		next_state 					<=	s15;
-		count 						<=	8'h00;
-		count_act 					<=	8'h00;
-
-		row 						<= 	8'h00;
-		column						<= 	8'h00;
+	if(rst_n == 1'b0)	begin
+		state 				<=	UNIT_PRE;
 	end
 	else begin
-		state  						<=	next_state;
+		state  				<=	next_state;
 	end
 end
 
 always@(*)
 begin
+	next_state 					=	state;
 	case(state)
-	s15 :begin
-			if(enable == 1'b1)	begin
-				next_state 		=	s0;
-			end
-			else begin
-				next_state 		=	s15;
-			end
-		end
-	//	kernel
-	s0 	:begin
-			if(count == (size_kernel*size_kernel+1)*number_pc_line - 1)	begin
-				next_state 	=	s1;
-			end
-			else begin
-				next_state 	=	s0;
-			end
-		end
-	//	column < size_kernel
-	s1 	:begin
-			if(count_act == size_kernel - 1 && column == size_kernel -1)	begin
-				next_state	=	s4;
-			end
-			else begin
-				next_state	=	s1;
-			end
-		end
-	//	caculater
-	s2 	:begin
-			if(endsignal_saveunit)	begin
-				if(row + size_kernel > size_act)	begin
-					next_state 			=	s7;
-				end
-				else begin
-					if(column	>=	size_kernel) begin
-						next_state 		=	s3;
+	// 				unit pre
+	UNIT_PRE  		:begin
+						if(`Isenable(enable))	begin
+							next_state 		=	READ_KER;
+						end
+						else begin
+							next_state 		=	UNIT_PRE;
+						end
 					end
-					else begin
-						next_state		=	s1;
+	
+	//				kernel
+	READ_KER 		:begin
+						if(count == (size_kernel*size_kernel+1)*number_pc_line - 1)	begin
+							next_state 		=	READ_ACT_ONE;
+						end
+						else begin
+							next_state 		=	READ_KER;
+						end
 					end
-				end
-			end
-			else begin
-				next_state 			=	s2;
-			end
-		end
-	//	column > size_kernel
-	s3 	:begin
-			if(count_act == size_kernel - 1 && count == stride - 1)	begin
-				next_state 			=	s4;
-			end
-			else begin
-				next_state  		=	s3;
-			end
-		end
 
-	//	wait time
-	s4 	:begin
-			next_state 			=	s5;
-		end
-	s5 	:begin
-			next_state 			=	s6;
-		end
-	s6 	:begin
-			next_state 			=	s2;
-		end
-	s7 	:begin
-			next_state 			=	s15;
-		end
+	//				column < size_kernel
+	READ_ACT_ONE 	:begin
+						if(count_act == size_kernel - 1 && column == size_kernel -1)	begin
+							next_state		=	WAIT_ONE;
+						end
+						else begin
+							next_state		=	READ_ACT_ONE;
+						end
+					end
+
+	//				caculater
+	CACULATE 		:begin
+						if(endsignal_saveunit)	begin
+							if(row + size_kernel > size_act)	begin
+								next_state 			=	FINISH;
+							end
+							else begin
+								if(column	>=	size_kernel) begin
+									next_state 		=	READ_ACT_TWO;
+								end
+								else begin
+									next_state		=	READ_ACT_ONE;
+								end
+							end
+						end
+						else begin
+							next_state 			=	CACULATE;
+						end
+					end
+
+	//				column > size_kernel
+	READ_ACT_TWO 	:begin
+						if(count_act == size_kernel - 1 && count == stride - 1)	begin
+							next_state 			=	WAIT_ONE;
+						end
+						else begin
+							next_state  		=	READ_ACT_TWO;
+						end
+					end
+
+	//				wait time
+	WAIT_ONE 		:begin
+						next_state 			=	WAIT_TWO;
+					end
+	WAIT_TWO 		:begin
+						next_state 			=	WAIT_THR;
+					end
+	WAIT_THR 		:begin
+						next_state 			=	CACULATE;
+					end
+
+ 	//				finish
+	FINISH 			:begin
+						next_state 			=	UNIT_PRE;
+					end
 	endcase
 end
 
-always@(posedge clk)
+always@(posedge clk or negedge rst_n)
 begin
-	case(state)
-	s0	:begin
-			//	kernel
-			address_kernel			=	address_kernel + 1;
-			enable_kernel_sram 		=	1'b1;
-			
-			//	act
-			address_act				=	address_read_base;
-			enable_act_sram			=	1'b0;
+	if(!rst_n)	begin
+		address_kernel				<=	16'hffff;
+		wea_kernel_sram 			<=	`SramRead;
+		enable_kernel_sram 			<=	`SramDisable;
 
-			//	count
-			if(count  <	(size_kernel*size_kernel + 1)*number_pc_line)	begin
-				count 	=	count + 1;
-			end
-			else begin
-				count 	=	8'h00;
-			end
-		end
-	s1	:begin
-			//	kernel
-			enable_kernel_sram		=	1'b0;
-			//	act
-			//	address_act
-			address_act 			=	address_read_base + row + column *size_act + count_act;
-			enable_act_sram			=	1'b1;
-			count_act 				=	(count_act + 1)%size_kernel;
-			if(count_act ==	8'h00)	begin
-				column = column + 1;
-			end
+		address_act 				<=	16'h0000;
+		wea_act_sram 				<=	`SramRead;
+		enable_act_sram 			<=	`SramDisable;
 
-		end
-	s2	:begin
-			//	kernel
-			enable_kernel_sram		=	1'b0;
-			//	act
-			enable_act_sram			=	1'b0;
-			enable_pe_array 		=	1'b0;
-			count 					=	8'h00;
-			count_act				=	8'h00;
-		end
-	s3 	:begin
-			address_act 			=	address_read_base + row + column*size_act + count_act;
-			enable_act_sram			=	1'b1;
-			count_act 				=	(count_act + 1)%size_kernel;
-			if(count_act ==	8'h00)	begin
-				column = (column + 1)%size_act;
-				if(column == 8'h00)	begin
-					row = row + stride;
-				end
-				count  = count + 1;
-			end
-		end
-	s4 	:begin
-			//	kernel
-			enable_kernel_sram		=	1'b0;
-			//	act
-			enable_act_sram			=	1'b0;
-			count 					=	8'h00;
-			count_act				=	8'h00;
-		end
-	s6 	:begin
-			enable_pe_array 	=	1'b1;
-		end
-	s7 	:begin
-			endsignal 			=	1'b1;
-		end
-	s15 :begin
-			endsignal 			=	1'b0;
-			row 				= 	8'h00;
-			column				= 	8'h00;
-		end
-	endcase
+		row 						<=	8'h00;
+		column 						<=	8'h00;
+
+		enable_pe_array				<= 	1'b0;
+		endsignal 					<=	`UnFinish;
+
+		count 						<=	16'h0000;
+		count_act 					<=	16'h0000;
+	end
+	else begin
+		case(state)
+		READ_KER		:begin
+							//	kernel
+							address_kernel			<=	address_kernel + 1;
+							enable_kernel_sram		<=	`SramEnable;
+							//	act
+							address_act				<=	address_read_base;
+							enable_act_sram			<=	`SramDisable;
+							if(count  <	(size_kernel*size_kernel + 1)*number_pc_line - 1)	begin
+								count 				<=	count + 1;
+							end
+							else begin
+								count 				<=	16'h00;
+							end
+						end
+
+		READ_ACT_ONE	:begin
+							//	kernel
+							enable_kernel_sram		<=	`SramDisable;
+							//	act
+							//	address_act
+							if(count_act ==	16'h0000)	begin
+								address_act 		<=	address_read_base + row + column *size_act;
+							end
+							else begin
+								address_act 		<=  address_act + 1;
+							end
+							
+							enable_act_sram			<=	`SramEnable;
+							count_act 				<=	(count_act + 1)%size_kernel;
+							if(count_act ==	size_kernel - 1)	begin
+								column 				<= column + 1;
+							end
+						end
+
+		CACULATE		:begin
+							//	kernel
+							enable_kernel_sram		<=	`SramDisable;
+							//	act
+							enable_act_sram			<=	`SramDisable;
+							enable_pe_array 		<=	`SramDisable;
+							count 					<=	16'h0000;
+							count_act				<=	8'h00;
+						end
+
+		READ_ACT_TWO 	:begin
+							if(count_act == 16'h0000)	begin
+								address_act 		<=	address_read_base + row + column*size_act;
+							end
+							else begin
+								address_act 		<=	address_act + 1;
+							end
+							
+							enable_act_sram			<=	`SramEnable;
+							count_act 				<=	(count_act + 1)%size_kernel;
+							if(count_act ==	size_kernel - 1)	begin
+								column 				<= (column + 1)%size_act;
+								
+								count 				<=	count + 1;
+							end
+						end
+
+		WAIT_ONE 		:begin
+							//	kernel
+							enable_kernel_sram		<=	1'b0;
+							//	act
+							enable_act_sram			<=	1'b0;
+							count 					<=	16'h00;
+							count_act				<=	16'h00;
+							if(column == 8'h00)	begin
+								row 				<= row + stride;
+							end
+						end
+
+		WAIT_THR 		:begin
+							enable_pe_array 		<=	1'b1;
+						end
+
+		FINISH 			:begin
+							endsignal 				<=	1'b1;
+						end
+
+		UNIT_PRE 		:begin
+							endsignal 				<=	1'b0;
+							row 					<= 	8'h00;
+							column					<= 	8'h00;
+							enable_act_sram			<=	1'b0;
+							enable_kernel_sram		<=	1'b0;
+						end
+		endcase
+	end
+	
 end
 
 endmodule

@@ -22,7 +22,7 @@
 
 module shift_reg_act(
 	input					clk,
-	input                   reset,
+	input                   rst_n,
 	input 					enable,
 	input 			[15:0]	input_data,
 
@@ -32,12 +32,10 @@ module shift_reg_act(
 reg                         state;
 reg                         next_state;
 
-always@(posedge clk or posedge reset)
+always@(posedge clk or negedge rst_n)
 begin
-	if(reset)	begin
-		next_state 			<=	1'b0;
+	if(rst_n == 1'b0)	begin
 		state 				<=	1'b0;
-		result 				<=	0;
 	end
 	else begin
 		state 				<=	next_state;
@@ -46,24 +44,31 @@ end
 
 always@(*)
 begin
+	next_state 				=	state;
 	if(enable)	begin
-		next_state			<=	1'b1;
+		next_state			=	1'b1;
 	end
 	else begin
-		next_state 			<=	1'b0;
+		next_state 			=	1'b0;
 	end
 end
 
-always@(posedge clk)
+always@(posedge clk or negedge rst_n)
 begin
-	case(state)
-	1'b0 	:begin
-				result 		<=	result;
-			end
-	1'b1 	:begin
-				result 	<=	{result[383:0],input_data};
-			end
-	endcase
+	if(!rst_n)	begin
+		result				<=	0;
+	end
+	else begin
+		case(state)
+		1'b0 	:begin
+					result 	<=	result;
+				end
+		1'b1 	:begin
+					result 	<=	{result[383:0],input_data};
+				end
+		endcase
+	end
+	
 end
 
 endmodule

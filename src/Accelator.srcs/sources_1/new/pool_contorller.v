@@ -18,11 +18,15 @@
 // Additional Comments:
 // 
 //////////////////////////////////////////////////////////////////////////////////
+`include "defines.v"
+
+`define  Isenable(enable) 		(enable == 1'b1)
+`define  IsWrite(enable)		(enable == 1'b1)
 
 
 module pooler_controller(
 	input 						clk,
-	input 						reset,
+	input 						rst_n,
 	input 						enable,
  
 	input 				[ 7:0]	size_act,
@@ -39,7 +43,7 @@ module pooler_controller(
 	output 		reg 			enable_write_sram,
 	output		reg				wea_write_sram,
 
-	output 		reg 	[15:0]	data_out,
+	output 		reg  	[15:0]	data_out,
 	output		reg				endsignal
     );
 
@@ -48,47 +52,24 @@ reg 					[3:0]	next_state;
 reg 					[15:0]	count;
 
 wire 					[15:0]	wire_data_out;
-wire 					[15:0]	wire_relu_dout;
 wire 							wire_valid_op;
-wire 							wire_endsignal;
+wire 					[15:0]	w_data_out;
 
 reg 							enable_pooler;
 
-localparam			[3:0]	s0 	= 4'b0000,
-							s1 	= 4'b0001,
-							s2 	= 4'b0010,
-							s3 	= 4'b0011,
-							s4 	= 4'b0100,
-							s5 	= 4'b0101,
-							s6 	= 4'b0110,
-							s7 	= 4'b0111,
-							s8 	= 4'b1000,
-							s9 	= 4'b1001,
-							s10	= 4'b1010,
-							s11	= 4'b1011,
-							s12	= 4'b1100,
-							s13	= 4'b1101,
-							s14	= 4'b1110,
-							s15	= 4'b1111;
+localparam			[3:0]	
+			READ_ONE 		= 4'b0000,
+			READ_TWO 		= 4'b0001,
+			WAIT_ONE 		= 4'b0010,
+			WAIT_TWO 		= 4'b0011,
+			WAIT_THR 		= 4'b0100,
+			FINISH 			= 4'b0101,
+			UNIT_PRE		= 4'b1111;
 
-always@(posedge reset or posedge clk)
+always@(negedge rst_n or posedge clk)
 begin
-	if(reset)	begin
-		address_read 		<=	16'h0000;
-		enable_read_sram 	<=	1'b0;
-		wea_read_sram 		<=	1'b0;
-		address_write		<=	16'h0000;
-		enable_write_sram	<=	1'b0;
-		wea_write_sram		<=	1'b1;
-
-		data_out			<=	8'h00;
-		endsignal			<=	1'b0;
-
-		state 				<=	s15;
-		next_state 			<=	s15;
-		count 				<=	16'h0000;
-
-		enable_pooler 		<=	1'b0;
+	if(!rst_n)	begin
+		state 				<=	UNIT_PRE;
 	end
 	else begin
 		state 				<=	next_state;
@@ -97,122 +78,162 @@ end
 
 always@(*)
 begin
+    next_state              =  state;
 	case(state)
-	s15	:begin
-			if(enable)	begin
-				next_state	=	s0;
-			end
-			else begin
-				next_state	=	s15;
-			end
-		end
-	s0 	:begin
-			next_state		=	s1;
-		end
-	s1 	:begin			
-			if(count	<	number_feature*size_act*size_act - 2)	begin
-				next_state		=	s1;
-			end
-			else begin
-				next_state		=	s2;
-			end
-		end
-	s2 	:begin
-			next_state		=	s3;
-		end
-	s3 	:begin
-			next_state		=	s4;
-		end
-	s4 	:begin
-			next_state		=	s5;
-		end
-	s5 	:begin
-			next_state		=	s15;
-		end
+	//  			
+	UNIT_PRE		:begin
+						if(`Isenable(enable))	begin
+							next_state	=	READ_ONE;
+						end
+						else begin
+							next_state	=	UNIT_PRE;
+						end
+					end
+
+	//				read one
+	READ_ONE 		:begin
+						next_state		=	READ_TWO;
+					end
+
+	//				read two
+	READ_TWO 		:begin			
+						if(count	<	number_feature*size_act*size_act - 2)	begin
+							next_state		=	READ_TWO;
+						end
+						else begin
+							next_state		=	WAIT_ONE;
+						end
+					end
+
+	// 				wait
+	WAIT_ONE 		:begin
+						next_state		=	WAIT_TWO;
+					end
+	WAIT_TWO 		:begin
+						next_state		=	WAIT_THR;
+					end
+	WAIT_THR 		:begin
+						next_state		=	FINISH;
+					end
+
+	//				finish
+	FINISH 			:begin
+						next_state		=	UNIT_PRE;
+					end
 	endcase
 end
 
-always@(posedge clk)
+always@(posedge clk or negedge rst_n)
 begin
-	case(state)
-	s15 :begin
-			address_read 		<=	16'h0000;
-			enable_read_sram 	<=	1'b0;
-			wea_read_sram 		<=	1'b0;
-			address_write		<=	16'hffff;
-			enable_write_sram	<=	1'b0;
-			wea_write_sram		<=	1'b1;
-			endsignal 			<=	1'b0;
-			enable_pooler 		<=	1'b0;
-		end
-	s0 	:begin
-			enable_read_sram	<=	1'b1;
-			wea_read_sram		<=	1'b0;
-			enable_pooler 		<=	1'b1;
-		end
-	s1 	:begin
-			enable_pooler 		<=	1'b0;
-			address_read		<=	address_read + 1;
-			count 				<=	count + 1;
-			data_out 			<=	wire_relu_dout;
-			if(wire_valid_op == 1'b1)	begin
-				address_write	<=	address_write + 1;
-				enable_write_sram	<=	1'b1;
-			end
-			else begin
-				enable_write_sram	<=	1'b0;
-			end
-		end
-	s2 	:begin
-			if(wire_valid_op == 1'b1)	begin
-				address_write	<=	address_write + 1;
-				enable_write_sram	<=	1'b1;
-			end
-			else begin
-				enable_write_sram	<=	1'b0;
-			end
-		end
-	s3 	:begin
-			if(wire_valid_op == 1'b1)	begin
-				address_write	<=	address_write + 1;
-				enable_write_sram	<=	1'b1;
-			end
-			else begin
-				enable_write_sram	<=	1'b0;
-			end
-		end
-	s4 	:begin
-			if(wire_valid_op == 1'b1)	begin
-				address_write	<=	address_write + 1;
-				enable_write_sram	<=	1'b1;
-			end
-			else begin
-				enable_write_sram	<=	1'b0;
-			end
-		end
-	s5 	:begin
-			enable_read_sram	<=	1'b0;
-			enable_write_sram 	<=	1'b0;
-			endsignal 			<=	1'b1;
-			count				<=	16'h0000;
-		end
-	endcase
+	if(!rst_n)	begin
+		address_read 		<=	16'h0000;
+		enable_read_sram 	<=	1'b0;
+		wea_read_sram 		<=	1'b0;
+		address_write		<=	16'hffff;
+		enable_write_sram	<=	1'b0;
+		wea_write_sram		<=	1'b1;
+		endsignal 			<=	1'b0;
+		enable_pooler 		<=	1'b0;
+		count 				<=	16'h0000;
+		data_out 			<=	16'h0000;
+	end
+	else begin
+			data_out 		<=	w_data_out;
+			case(state)
+			//				pre
+			UNIT_PRE 		:begin
+								address_read 		<=	16'h0000;
+								enable_read_sram 	<=	`SramDisable;
+								wea_read_sram 		<=	`SramRead;
+								address_write		<=	16'hffff;
+								enable_write_sram	<=	`SramDisable;
+								wea_write_sram		<=	`SramWrite;
+								endsignal 			<=	`UnFinish;
+								enable_pooler 		<=	`UnitDisable;
+								count 				<=	16'h0000;
+							end
+
+			//				read one
+			READ_ONE 		:begin
+								enable_read_sram	<=	`SramEnable;
+								wea_read_sram		<=	`SramRead;
+								enable_pooler 		<=	`UnitEnable;
+							end
+
+			//				read two
+			READ_TWO 		:begin
+								enable_pooler 			<=	`UnitDisable;
+								address_read			<=	address_read + 1;
+								count 					<=	count + 1;
+								if(`IsWrite(wire_valid_op))	begin
+									address_write		<=	address_write + 1;
+									enable_write_sram	<=	`SramEnable;
+								end
+								else begin
+									enable_write_sram	<=	`SramDisable;
+								end
+							end
+
+			// 				wait one
+			WAIT_ONE 		:begin
+								enable_read_sram		<=	`SramDisable;
+								if(`IsWrite(wire_valid_op))	begin
+									address_write		<=	address_write + 1;
+									enable_write_sram	<=	`SramEnable;
+								end
+								else begin
+									enable_write_sram	<=	`SramDisable;
+								end
+							end
+
+			// 				wait two
+			WAIT_TWO 		:begin
+								if(`IsWrite(wire_valid_op))	begin
+									address_write		<=	address_write + 1;
+									enable_write_sram	<=	`SramEnable;
+								end
+								else begin
+									enable_write_sram	<=	`SramDisable;
+								end
+							end
+
+			// 				wait three
+			WAIT_THR 		:begin
+								if(`IsWrite(wire_valid_op))	begin
+									address_write		<=	address_write + 1;
+									enable_write_sram	<=	`SramEnable;
+								end
+								else begin
+									enable_write_sram	<=	`SramDisable;
+								end
+							end
+
+			//				finish
+			FINISH 			:begin
+								enable_read_sram	<=	`SramDisable;
+								enable_write_sram 	<=	`SramDisable;
+								endsignal 			<=	`Finish;
+								enable_pooler 		<=	`UnitDisable;
+								count				<=	16'h0000;
+							end
+			endcase
+	end
 end
 
-pooler u_pooler(
+pool_logic 	u_pooler_logic(
 	.clk 					(clk),
-	.enable 				(enable_pooler),
-	.master_rst 			(reset),
+	.rst_n 					(rst_n),
+	.enable 	 			(enable_pooler),
 	.size_act 				(size_act),
-	.size_pool_kernel 		(size_kernel),
-	.num_feature 			(number_feature),
+	.size_kernel 			(size_kernel),
+	.number_feature 		(number_feature),
 	.data_in 				(data_in),
 	.data_out 				(wire_data_out),
-	.valid_op 				(wire_valid_op),
-	.end_pool 				(wire_endsignal));
+	.valid_op 				(wire_valid_op));
+
 
 relu	u_relu(
 	.din_relu 				(wire_data_out),
-	.dout_relu				(wire_relu_dout));
+	.dout_relu				(w_data_out));
 
 endmodule

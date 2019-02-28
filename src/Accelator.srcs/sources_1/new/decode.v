@@ -22,7 +22,7 @@
 
 module decode(
 	input 					clk,
-	input					reset,
+	input					rst_n,
 	input					enable,
 
 	input 			[15:0]	data_pc_in,
@@ -32,10 +32,10 @@ module decode(
 	output 	reg				wea_pc_sram,
 	output	reg		[15:0]	address_pc_sram,
 
-	output	reg		[15:0]	size_act,
-	output 	reg 	[15:0]	size_kernel,
-	output	reg		[15:0]	stride,
-	output	reg		[15:0]	number_pc_line,
+	output	reg		[7:0]	size_act,
+	output 	reg 	[7:0]	size_kernel,
+	output	reg		[7:0]	stride,
+	output	reg		[7:0]	number_pc_line,
 
 	output	reg		[15:0]	address_read_base,
 	output	reg		[15:0]	address_write_base,
@@ -67,20 +67,10 @@ localparam			[3:0]	s0 	= 4'b0000,
 							s14	= 4'b1110,
 							s15	= 4'b1111;
 
-always@(posedge reset or posedge clk)
+always@(negedge rst_n or posedge clk)
 begin
-	if(reset)	begin
-		enable_pc_sram		<=	1'b0;
-		wea_pc_sram			<=	1'b0;
-		address_pc_sram		<=	16'hffff;
-
-		model 				<=	4'hf;
+	if(rst_n == 1'b0)	begin
 		state				<=	s15;
-		next_state			<=	s0;
-		model_saveunit 		<= 	1'b0;
-
-		enable_controller 	<=	1'b0;
-		enable_pooler 		<=	1'b0;
 	end
 	else begin
 		state 				<=	next_state;
@@ -90,10 +80,17 @@ end
 
 always@(*)
 begin
+	next_state 				=	state;
 	case(state)
 	//	start
 	s15 :begin
-			next_state		=	s0;
+			if(enable)		begin
+				next_state	=	s0;
+			end
+			else begin
+				next_state	=	s15;
+			end
+			
 		end
 	s0	:begin
 			next_state		=	s1;
@@ -157,59 +154,68 @@ always@(posedge clk)
 begin
 	case(state)
 	s0	:begin
-			enable_pc_sram		=	1'b1;
-			wea_pc_sram			=	1'b0;
-			address_pc_sram		=	address_pc_sram	+ 1;
+			enable_pc_sram		<=	1'b1;
+			wea_pc_sram			<=	1'b0;
+			address_pc_sram		<=	address_pc_sram	+ 1;
 		end
 	s1	:begin
-			enable_pc_sram		=	1'b0;
+			enable_pc_sram		<=	1'b0;
 		end
 	//	conv
 	s2 	:begin
-			enable_pc_sram 		=	1'b0;
+			enable_pc_sram 		<=	1'b0;
+			
 		end
 	s3	:begin
-			enable_pc_sram		=	1'b1;
-			wea_pc_sram			=	1'b0;
-			address_pc_sram		=	address_pc_sram	+ 1;
-			size_act			=	data_pc_in[7:0];
-			model_saveunit 		=	data_pc_in[12];
+			enable_pc_sram		<=	1'b1;
+			wea_pc_sram			<=	1'b0;
+			address_pc_sram		<=	address_pc_sram	+ 1;
+			size_act			<=	data_pc_in[7:0];
+			model_saveunit 		<=	data_pc_in[12];
 		end
 	s4 	:begin
-			enable_pc_sram		=	1'b1;
-			wea_pc_sram			=	1'b0;
-			address_pc_sram		=	address_pc_sram	+ 1;
+			enable_pc_sram		<=	1'b1;
+			wea_pc_sram			<=	1'b0;
+			address_pc_sram		<=	address_pc_sram	+ 1;
 		end
 	s5 	:begin
-			enable_pc_sram		=	1'b1;
-			wea_pc_sram			=	1'b0;
-			address_pc_sram		=	address_pc_sram	+ 1;
-			size_kernel			=	data_pc_in[15:8];
-			number_pc_line 		=	data_pc_in[7:4];
-			stride 				=	data_pc_in[3:0];
+			enable_pc_sram		<=	1'b1;
+			wea_pc_sram			<=	1'b0;
+			address_pc_sram		<=	address_pc_sram	+ 1;
+			size_kernel			<=	data_pc_in[15:8];
+			number_pc_line 		<=	data_pc_in[7:4];
+			stride 				<=	data_pc_in[3:0];
 		end
 	s6 	:begin
-			enable_pc_sram		=	1'b0;
-			address_read_base	=	data_pc_in;
+			enable_pc_sram		<=	1'b0;
+			address_read_base	<=	data_pc_in;
 		end
 	s7 	:begin
-			address_write_base 	=	data_pc_in;
-			enable_controller 	=	1'b1;
+			address_write_base 	<=	data_pc_in;
+			enable_controller 	<=	1'b1;
 		end
 	//	pooler
 	s8 	:begin
-			enable_pc_sram 		=	1'b0;
+			enable_pc_sram 		<=	1'b0;
 		end
 	s9 	:begin
-			size_kernel 		=	data_pc_in[15:8];
-			number_pc_line 		=	data_pc_in[7:0];////
-			enable_pooler   	=	1'b1;
+			size_kernel 		<=	data_pc_in[15:8];
+			number_pc_line 		<=	data_pc_in[7:0];
+			enable_pooler   	<=	1'b1;
 		end
 	//	wait
 	s14	:begin
-			enable_pc_sram		=	1'b0;
-			enable_controller 	=	1'b0;
-			enable_pooler  		=	1'b0;
+			enable_pc_sram		<=	1'b0;
+			enable_controller 	<=	1'b0;
+			enable_pooler  		<=	1'b0;
+		end
+	s15 :begin
+			enable_pc_sram		<=	1'b0;
+			wea_pc_sram			<=	1'b0;
+			address_pc_sram		<=	16'hffff;
+			model_saveunit 		<= 	1'b0;
+			enable_controller 	<=	1'b0;
+			enable_pooler 		<=	1'b0;
 		end
 	endcase
 end

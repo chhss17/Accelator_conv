@@ -18,15 +18,18 @@
 // Additional Comments:
 // 
 //////////////////////////////////////////////////////////////////////////////////
+`include "defines.v"
 
+`define  IsEnable(enable) 				(enable[5:0] != 6'b000000)
+`define  IsFirstDim(model) 				(model 	==	1'b0)
+`define  IsWriteAll(number,count)		(number ==	count)
 
 module save_unit(
 	input 					clk,
-	input					reset,
+	input					rst_n,
 
 	input 			[7:0]	size_act,
 	input			[7:0]	size_kernel,
-	input 			[7:0]	stride,
 	input 			[15:0]	address_write_base,
 
 	input			[5:0]	enable,
@@ -53,55 +56,32 @@ reg					[15:0]	reg_data_result[5:0];
 reg 				[3:0]	state;
 reg 				[3:0]	next_state;
 
-reg 				[2:0]	count;
-reg 				[2:0]	number;
+reg 				[7:0]	count;
+reg 				[7:0]	number;
 reg  				[7:0]	row;
 reg  				[7:0]	column;
 
-localparam			[3:0]	s0 	= 4'b0000,
-							s1 	= 4'b0001,
-							s2 	= 4'b0010,
-							s3 	= 4'b0011,
-							s4 	= 4'b0100,
-							s5 	= 4'b0101,
-							s6 	= 4'b0110,
-							s7 	= 4'b0111,
-							s8 	= 4'b1000,
-							s9 	= 4'b1001,
-							s10	= 4'b1010,
-							s11	= 4'b1011,
-							s12	= 4'b1100,
-							s13	= 4'b1101,
-							s14	= 4'b1110,
-							s15	= 4'b1111;
+localparam			[3:0]	
+		WAIT 				= 4'b0000,
+		REC_ENA			 	= 4'b0001,
+		REC_ONE 		 	= 4'b0010,
+		REC_TWO 		 	= 4'b0011,
+		ADDRESS 		 	= 4'b0110,
+		READ 			 	= 4'b0111,
+		READ_ONE 		 	= 4'b1000,
+		READ_TWO 			= 4'b1011,
+		WRITE 			 	= 4'b1001,
+		FINISH 				= 4'b1010,
+		UNIT_PRE 			= 4'b1111;
 
 reg 				[15:0]	address_init[5:0];
 reg 				[15:0]	reg_size_feature_map;
 
 
-always@(posedge reset or posedge clk)
+always@(negedge rst_n or posedge clk)
 begin
-	if(reset) begin
-		reg_data_result[0] 	<=	8'h00;
-		reg_data_result[1]	<=	8'h00;
-		reg_data_result[2] 	<=	8'h00;
-		reg_data_result[3]	<=	8'h00;
-		reg_data_result[4]	<=	8'h00;
-		reg_data_result[5]	<=	8'h00;
-		address_init[0]		<=	16'h0000;
-		address_init[1]		<=	16'h2aaa;
-		address_init[2]		<=	16'h5554;
-		address_init[3]		<=	16'h7ffe;
-		address_init[4]		<=	16'haaa8;
-		address_init[5]		<=	16'hd662;
-		count 				<=	3'b000; 
-		number 				<= 	3'b001;
-		enable_sram			<= 	1'b0;
-		state 				<= 	s15;
-		next_state			<=	s15;
-		row 				<=	8'h00;
-		column 				<=	8'h00;
-		endsignal 			<=	1'b0;
+	if(rst_n == 1'b0) begin
+		state 				<= 	UNIT_PRE;
 	end
 	else begin
 		state 				<=	next_state;
@@ -110,217 +90,193 @@ end
 
 always@(*)
 begin
+	next_state 				=	state;
 	case(state)
-	// 	s0	start
-	s15	:begin
-			if(enable 		!= 6'b000000)	begin
-				next_state 	 = s1;
-			end
-			else begin
-				next_state 	 = s15;
-			end
-		end
-	s0 	:begin
-			if(enable 		!= 6'b000000)	begin
-				next_state 	 = s1;
-			end
-			else begin
-				next_state 	 = s0;
-			end
-		end
-	// 	s1	input data
-	s1	:begin
-			next_state		= s2;
-		end
-	// 	s2	wait
-	s2	:begin
-			if(enable 		!= 6'b000000)	begin
-				next_state 	 = s1;
-			end
-			else begin
-				next_state 	 = s3;
-			end
-		end
-	// 	s3	address
-	s3	:begin
-			if(model == 1'b1)	begin
-				next_state		= s4;
-			end
-			else begin
-				next_state 		= s9;
-			end
-		end
-	// 	s4	read
-	s4	:begin
-			next_state		= s5;
-		end
-	s5 	:begin
-			next_state 		= s6;
-		end
-	//	s6	add
-	s6	:begin
-			next_state		= s7;
-		end
-	// 	s6	write back
-	s7	:begin
-			if(number 	< 	count)	begin
-				next_state	= s3;
-				number 		= number + 1;
-			end
-			else begin
-				next_state	= s8;
-				count 		= 0;
-				number 		= 1;
-			end
-		end
-	s9 	:begin
-			next_state 		= s10;
-		end
-	s10	:begin
-			if(number 	< 	count)	begin
-				next_state	= s3;
-				number 		= number + 1;
-			end
-			else begin
-				next_state	= s8;
-				count 		= 0;
-				number 		= 1;
-			end
-		end
-	s8 	:begin
-			next_state 		=	s0;
-		end
+	// 			UNIT_PRE
+	UNIT_PRE	:begin
+					if(`IsEnable(enable))	begin
+						next_state 	= 	REC_ENA;
+					end
+					else begin
+						next_state 	= 	UNIT_PRE;
+					end
+				end
+	// 			REC_ENA	input data
+	REC_ENA 	:begin
+					next_state		= 	REC_ONE;
+				end
+	// 			REC_ONE	wait
+	REC_ONE		:begin
+					next_state 		= 	REC_TWO;
+				end
+	//			REC_TWO  wait
+	REC_TWO 	:begin
+					if(`IsEnable(enable))	begin
+						next_state 	= 	REC_ENA;
+					end
+					else begin
+						next_state 	= 	ADDRESS;
+					end
+					
+				end
+
+	// 			caculater the address
+	ADDRESS 	:begin
+					if(`IsFirstDim(model))	begin
+						next_state 	=	WRITE;
+					end
+					else begin
+						next_state 	=	READ;
+					end
+				end
+
+	// 			read the data
+	READ 		:begin
+					next_state 		=	READ_ONE;
+				end
+	READ_ONE 	:begin
+					next_state 		=	READ_TWO;
+				end
+	READ_TWO 	:begin
+					next_state 		=	WRITE;
+				end
+
+	// 			write the data
+	WRITE 		:begin
+					if(`IsWriteAll(number,count))	begin
+						next_state 	=	FINISH;
+					end
+					else begin
+						next_state 	=	ADDRESS;
+					end
+				end
+
+	// 			end signal
+	FINISH 		:begin
+					next_state 		=	WAIT;
+				end
+
+	// 			wait without enable
+	WAIT 		:begin
+					if(`IsEnable(enable))	begin
+						next_state 	=	REC_ENA;
+					end
+					else begin
+						next_state 	=	WAIT;
+					end
+				end
 	endcase
 end
 
-always@(posedge clk)
+always@(posedge clk or posedge rst_n)
 begin
-	case(state)
-	s15	:begin
-			address		= 	16'h0000;
-			enable_sram	=	1'b0;
-			wea_sram	=	1'b0;
-			data_out	=	16'h0000;
-			endsignal 		=	1'b0;
-			reg_size_feature_map	=	size_act - size_kernel + 1;
-			address_init[0]	=	address_write_base;
-			address_init[1]	=	address_write_base + reg_size_feature_map*reg_size_feature_map;
-			address_init[2]	=	address_write_base + 2*reg_size_feature_map*reg_size_feature_map;
-			address_init[3]	=	address_write_base + 3*reg_size_feature_map*reg_size_feature_map;
-			address_init[4]	=	address_write_base + 4*reg_size_feature_map*reg_size_feature_map;
-			address_init[5]	=	address_write_base + 5*reg_size_feature_map*reg_size_feature_map;
-		end
-	s0 	:begin
-			enable_sram	=	1'b0;
-			wea_sram	=	1'b0;
-			data_out	=	16'h0000;
-			endsignal 		=	1'b0;
-			reg_size_feature_map	=	size_act - size_kernel + 1;
-			address_init[0]	=	address_write_base;
-			address_init[1]	=	address_write_base + reg_size_feature_map*reg_size_feature_map;
-			address_init[2]	=	address_write_base + 2*reg_size_feature_map*reg_size_feature_map;
-			address_init[3]	=	address_write_base + 3*reg_size_feature_map*reg_size_feature_map;
-			address_init[4]	=	address_write_base + 4*reg_size_feature_map*reg_size_feature_map;
-			address_init[5]	=	address_write_base + 5*reg_size_feature_map*reg_size_feature_map;
-			
-		end
-	s1	:begin
-			address		= 	16'h0000;
-			enable_sram	=	1'b0;
-			wea_sram	=	1'b0;
-			data_out	=	16'h0000;
-			
-		end
-	s2	:begin
-			address		= 	16'h0000;
-			enable_sram	=	1'b0;
-			wea_sram	=	1'b0;
-			data_out	=	16'h0000;
-		end
-	s3	:begin
-			address		= 	address_init[number - 1] + row + column*reg_size_feature_map;
-			enable_sram	=	1'b0;
-			wea_sram	=	1'b0;
-			data_out	=	16'h0000;
-		end
-	s4	:begin
-			enable_sram =	1'b1;
-			wea_sram	=	1'b0;
-		end
-	s5 	:begin
-			enable_sram =	1'b0;
-			wea_sram	=	1'b0;
-		end
-	s6	:begin
-			enable_sram	=	1'b0;
-			wea_sram	=	1'b0;
-			data_out	=	$signed(reg_data_result[number - 1]) + $signed(data_in);
-		end
-	s7	:begin
-			enable_sram	=	1'b1;
-			wea_sram	=	1'b1;
-		end
-	s9 	:begin
-			enable_sram	=	1'b0;
-			wea_sram	=	1'b0;
-			data_out	=	reg_data_result[number - 1];
-		end
-	s10 :begin
-			enable_sram	=	1'b1;
-			wea_sram	=	1'b1;
-		end
-	s8 	:begin
-			address		= 	16'h0000;
-			enable_sram	=	1'b0;
-			wea_sram	=	1'b0;
-			endsignal 	=	1'b1;
-			column = (column + 1)%(size_act - size_kernel + 1);
-			if(column == 8'h00)	begin
-				if(row < size_act - size_kernel) begin
-					row = row + 1;
-				end
-				else begin
-					row = 8'h00;
-				end
-			end
-		end
-	endcase
+	if(!rst_n)	begin
+		address					<= 	16'h0000;
+		enable_sram	 			<=	`SramDisable;
+		wea_sram	 			<=	`SramRead;
+		data_out				<=	16'h0000;
+		endsignal 				<=	`UnFinish;
+		reg_data_result[0] 		<=	8'h00;
+		reg_data_result[1]		<=	8'h00;
+		reg_data_result[2] 		<=	8'h00;
+		reg_data_result[3]		<=	8'h00;
+		reg_data_result[4]		<=	8'h00;
+		reg_data_result[5]		<=	8'h00;
+		row 					<=	8'h00;
+		column 					<=	8'h00;
+		number 					= 	8'h00;
+		count 					=	8'h00;
+	end
+	else begin
+		case(state)
+		WAIT 			:begin
+							enable_sram				<=	`SramDisable;
+							wea_sram				<=	`SramRead;
+							data_out				<=	16'h0000;
+							endsignal 				<=	`UnFinish;
+							number 					<= 	8'h00;
+							count 					<=	8'h00;
+						end
+		REC_ENA			:begin
+							address					<= 	16'h0000;
+							enable_sram				<=	`SramDisable;
+							wea_sram				<=	`SramRead;
+							data_out				<=	16'h0000;
+							reg_size_feature_map	<=	size_act - size_kernel + 1;
+							count 					<=	count + 1;
+						end
+		REC_ONE 		:begin
+							address_init[count - 1]	<=	address_write_base + (count - 1)*reg_size_feature_map*reg_size_feature_map;
+						end
+		ADDRESS	 		:begin
+							address					<= 	address_init[number] + row + column*reg_size_feature_map;
+							enable_sram 			<=	`SramDisable;
+							wea_sram 				<=	`SramRead;
+							data_out 				<=	reg_data_result[number];
+							number	 				<=	number + 1;
+						end
+		READ 			:begin
+							enable_sram 			<=	`SramEnable;
+							wea_sram 				<=	`SramRead;
+						end
+		READ_ONE 		:begin
+							enable_sram 			<=	`SramDisable;
+						end
+		READ_TWO 		:begin
+							data_out				<=	$signed(data_out) + $signed(data_in);
+						end
+		WRITE 			:begin
+							enable_sram 			<=	`SramEnable;
+							wea_sram 				<=	`SramWrite;
+						end
+
+		FINISH 			:begin
+							endsignal 				<=	`Finish;
+							enable_sram 			<= 	`SramDisable;
+							wea_sram 				<=	`SramRead;
+							column 					<=	(column + 1)%reg_size_feature_map;
+							if(column == size_act - size_kernel)	begin
+								if(row	==	reg_size_feature_map - 1)	begin
+									row 			<=	8'h00;
+								end
+								else begin
+									row 			<=	row + 1;
+								end
+							end
+						end
+		endcase
+	end
+	
 end
 
 always@(posedge enable[0])
 begin
 	reg_data_result[5]	=	{data_result_6[31],data_result_6[29:15]};
-	count 				=	count + 1;
 end
 
 always@(posedge enable[1])
 begin
 	reg_data_result[4]	=	{data_result_5[31],data_result_5[29:15]};
-	count 				=	count + 1;
 end
 
 always@(posedge enable[2])
 begin
 	reg_data_result[3]	=	{data_result_4[31],data_result_4[29:15]};
-	count 				=	count + 1;
 end
 
 always@(posedge enable[3])
 begin
 	reg_data_result[2]	=	{data_result_3[31],data_result_3[29:15]};
-	count 				=	count + 1;
 end
 
 always@(posedge enable[4])
 begin
 	reg_data_result[1]	=	{data_result_2[31],data_result_2[29:15]};
-	count 				=	count + 1;
 end
 
 always@(posedge enable[5])
 begin
 	reg_data_result[0]	=	{data_result_1[31],data_result_1[29:15]};
-	count 				=	count + 1;
 end
 
 endmodule
