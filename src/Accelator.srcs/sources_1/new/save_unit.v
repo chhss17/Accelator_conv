@@ -66,6 +66,7 @@ localparam			[3:0]
 		REC_ENA			 	= 4'b0001,
 		REC_ONE 		 	= 4'b0010,
 		REC_TWO 		 	= 4'b0011,
+		WAIT_ONE 			= 4'b0100,
 		ADDRESS 		 	= 4'b0110,
 		READ 			 	= 4'b0111,
 		READ_ONE 		 	= 4'b1000,
@@ -208,6 +209,11 @@ begin
 		REC_ONE 		:begin
 							address_init[count - 1]	<=	address_write_base + (count - 1)*reg_size_feature_map*reg_size_feature_map;
 						end
+
+		WAIT_ONE 		:begin
+							enable_sram 			<=	`SramDisable;
+							wea_sram 				<=	`SramRead;
+						end
 		ADDRESS	 		:begin
 							address					<= 	address_init[number] + row + column*reg_size_feature_map;
 							enable_sram 			<=	`SramDisable;
@@ -251,32 +257,32 @@ end
 
 always@(posedge enable[0])
 begin
-	reg_data_result[5]	=	{data_result_6[31],data_result_6[29:15]};
+	reg_data_result[5] 	<= 	{data_result_6[31],data_result_6[29:15]};
 end
 
 always@(posedge enable[1])
 begin
-	reg_data_result[4]	=	{data_result_5[31],data_result_5[29:15]};
+	reg_data_result[4] 	<= 	{data_result_5[31],data_result_5[29:15]};
 end
 
 always@(posedge enable[2])
 begin
-	reg_data_result[3]	=	{data_result_4[31],data_result_4[29:15]};
+	reg_data_result[3] 	<= 	{data_result_4[31],data_result_4[29:15]};
 end
 
 always@(posedge enable[3])
 begin
-	reg_data_result[2]	=	{data_result_3[31],data_result_3[29:15]};
+	reg_data_result[2] 	<= 	{data_result_3[31],data_result_3[29:15]};
 end
 
 always@(posedge enable[4])
 begin
-	reg_data_result[1]	=	{data_result_2[31],data_result_2[29:15]};
+	reg_data_result[1] 	<= 	{data_result_2[31],data_result_2[29:15]};
 end
 
 always@(posedge enable[5])
 begin
-	reg_data_result[0]	=	{data_result_1[31],data_result_1[29:15]};
+	reg_data_result[0] 	<= 	{data_result_1[31],data_result_1[29:15]};
 end
 
 endmodule

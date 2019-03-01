@@ -18,7 +18,7 @@
 // Additional Comments:
 // 
 //////////////////////////////////////////////////////////////////////////////////
-
+`include "defines.v"
 
 module decode(
 	input 					clk,
@@ -50,27 +50,24 @@ reg					[3:0]		state;
 reg 				[3:0]		next_state;
 reg					[3:0]		model;
 
-localparam			[3:0]	s0 	= 4'b0000,
-							s1 	= 4'b0001,
-							s2 	= 4'b0010,
-							s3 	= 4'b0011,
-							s4 	= 4'b0100,
-							s5 	= 4'b0101,
-							s6 	= 4'b0110,
-							s7 	= 4'b0111,
-							s8 	= 4'b1000,
-							s9 	= 4'b1001,
-							s10	= 4'b1010,
-							s11	= 4'b1011,
-							s12	= 4'b1100,
-							s13	= 4'b1101,
-							s14	= 4'b1110,
-							s15	= 4'b1111;
+localparam			[3:0]	
+		READ_ONE 		= 4'b0000,
+		WAIT_ONE 		= 4'b0001,
+		JUDGE 			= 4'b0010,
+		READ_TWO 		= 4'b0011,
+		READ_THR 		= 4'b0100,
+		READ_FOU 		= 4'b0101,
+		WAIT_TWO 		= 4'b0110,
+		ENA_CONV 		= 4'b0111,
+		WAIT_FIV 		= 4'b1000,
+		ENA_POOL 		= 4'b1001,
+		WAIT			= 4'b1110,
+		UNIT_PRE		= 4'b1111;
 
 always@(negedge rst_n or posedge clk)
 begin
-	if(rst_n == 1'b0)	begin
-		state				<=	s15;
+	if(!rst_n)	begin
+		state				<=	UNIT_PRE;
 	end
 	else begin
 		state 				<=	next_state;
@@ -83,141 +80,152 @@ begin
 	next_state 				=	state;
 	case(state)
 	//	start
-	s15 :begin
-			if(enable)		begin
-				next_state	=	s0;
-			end
-			else begin
-				next_state	=	s15;
-			end
-			
-		end
-	s0	:begin
-			next_state		=	s1;
-		end
-	s1 	:begin
-			next_state 		=	s2;
-		end
-	s2	:begin
-			model 			=	data_pc_in[11:8];
-			if(model ==	4'hf)	begin
-				next_state	=	s14;
-			end
-			else begin
-				next_state	=	s3;
-			end
-		end
+	UNIT_PRE 	:begin
+					if(enable)		begin
+						next_state	=	READ_ONE;
+					end
+					else begin
+						next_state	=	UNIT_PRE;
+					end
+				end
+	READ_ONE	:begin
+					next_state		=	WAIT_ONE;
+				end
+	WAIT_ONE 	:begin
+					next_state 		=	JUDGE;
+				end
+	JUDGE		:begin
+					model 			=	data_pc_in[11:8];
+					if(model ==	4'hf)	begin
+						next_state	=	WAIT;
+					end
+					else begin
+						next_state	=	READ_TWO;
+					end
+				end
 
 	//	conv
-	s3	:begin
-			if(model == 4'h1)	begin
-				next_state	=	s4;
-			end
-			else begin
-				next_state 	=	s8;
-			end
-		end
-	s4 	:begin
-			next_state		=	s5;
-		end
-	s5 	:begin
-			next_state		=	s6;
-		end
-	s6 	:begin
-			next_state 		=	s7;
-		end
-	s7 	:begin
-			next_state 		=	s14;
-		end
+	READ_TWO	:begin
+					if(model == 4'h1)	begin
+						next_state	=	READ_THR;
+					end
+					else begin
+						next_state 	=	WAIT_FIV;
+					end
+				end
+	READ_THR 	:begin
+					next_state		=	READ_FOU;
+				end
+	READ_FOU 	:begin
+					next_state		=	WAIT_TWO;
+				end
+	WAIT_TWO 	:begin
+					next_state 		=	ENA_CONV;
+				end
+	ENA_CONV 	:begin
+					next_state 		=	WAIT;
+				end
 
 	//	pooler
-	s8 	:begin
-			next_state 		=	s9;
-		end
-	s9 	:begin
-			next_state 		=	s14;
-		end
+	WAIT_FIV 	:begin
+					next_state 		=	ENA_POOL;
+				end
+	ENA_POOL 	:begin
+					next_state 		=	WAIT;
+				end
 
 	//	wait
-	s14 	:begin
-			if(enable)	begin
-				next_state	=	s0;
-			end
-			else begin
-				next_state	=	s14;
-			end
-		end
+	WAIT 		:begin
+					if(enable)	begin
+						next_state	=	READ_ONE;
+					end
+					else begin
+						next_state	=	WAIT;
+					end
+				end
 	endcase
 end
 
-always@(posedge clk)
+always@(posedge clk or negedge rst_n)
 begin
+	if(!rst_n)	begin
+		enable_pc_sram		<=	`SramDisable;
+		wea_pc_sram			<=	`SramRead;
+		address_pc_sram		<=	16'hffff;
+		size_kernel 		<=	`EightBInit;
+		size_act 			<=	`EightBInit;
+		model_saveunit 		<= 	1'b0;
+		enable_controller 	<=	`UnitDisable;
+		enable_pooler 		<=	`UnitDisable;
+	end
+	else begin
 	case(state)
-	s0	:begin
-			enable_pc_sram		<=	1'b1;
-			wea_pc_sram			<=	1'b0;
-			address_pc_sram		<=	address_pc_sram	+ 1;
-		end
-	s1	:begin
-			enable_pc_sram		<=	1'b0;
-		end
-	//	conv
-	s2 	:begin
-			enable_pc_sram 		<=	1'b0;
-			
-		end
-	s3	:begin
-			enable_pc_sram		<=	1'b1;
-			wea_pc_sram			<=	1'b0;
-			address_pc_sram		<=	address_pc_sram	+ 1;
-			size_act			<=	data_pc_in[7:0];
-			model_saveunit 		<=	data_pc_in[12];
-		end
-	s4 	:begin
-			enable_pc_sram		<=	1'b1;
-			wea_pc_sram			<=	1'b0;
-			address_pc_sram		<=	address_pc_sram	+ 1;
-		end
-	s5 	:begin
-			enable_pc_sram		<=	1'b1;
-			wea_pc_sram			<=	1'b0;
-			address_pc_sram		<=	address_pc_sram	+ 1;
-			size_kernel			<=	data_pc_in[15:8];
-			number_pc_line 		<=	data_pc_in[7:4];
-			stride 				<=	data_pc_in[3:0];
-		end
-	s6 	:begin
-			enable_pc_sram		<=	1'b0;
-			address_read_base	<=	data_pc_in;
-		end
-	s7 	:begin
-			address_write_base 	<=	data_pc_in;
-			enable_controller 	<=	1'b1;
-		end
-	//	pooler
-	s8 	:begin
-			enable_pc_sram 		<=	1'b0;
-		end
-	s9 	:begin
-			size_kernel 		<=	data_pc_in[15:8];
-			number_pc_line 		<=	data_pc_in[7:0];
-			enable_pooler   	<=	1'b1;
-		end
-	//	wait
-	s14	:begin
-			enable_pc_sram		<=	1'b0;
-			enable_controller 	<=	1'b0;
-			enable_pooler  		<=	1'b0;
-		end
-	s15 :begin
-			enable_pc_sram		<=	1'b0;
-			wea_pc_sram			<=	1'b0;
-			address_pc_sram		<=	16'hffff;
-			model_saveunit 		<= 	1'b0;
-			enable_controller 	<=	1'b0;
-			enable_pooler 		<=	1'b0;
-		end
-	endcase
+		READ_ONE	:begin
+						enable_pc_sram		<=	`SramEnable;
+						wea_pc_sram			<=	`SramRead;
+						address_pc_sram		<=	address_pc_sram	+ 1;
+					end
+		WAIT_ONE	:begin
+						enable_pc_sram		<=	`SramDisable;
+					end
+		//	conv
+		JUDGE 		:begin
+						enable_pc_sram 		<=	`SramDisable;
+						
+					end
+		READ_TWO	:begin
+						enable_pc_sram		<=	`SramEnable;
+						wea_pc_sram			<=	`SramRead;
+						address_pc_sram		<=	address_pc_sram	+ 1;
+						size_act			<=	data_pc_in[7:0];
+						model_saveunit 		<=	data_pc_in[12];
+					end
+		READ_THR 	:begin
+						enable_pc_sram		<=	`SramEnable;
+						wea_pc_sram			<=	`SramRead;
+						address_pc_sram		<=	address_pc_sram	+ 1;
+					end
+		READ_FOU 	:begin
+						enable_pc_sram		<=	`SramEnable;
+						wea_pc_sram			<=	`SramRead;
+						address_pc_sram		<=	address_pc_sram	+ 1;
+						size_kernel			<=	data_pc_in[15:8];
+						number_pc_line 		<=	data_pc_in[7:4];
+						stride 				<=	data_pc_in[3:0];
+					end
+		WAIT_TWO 	:begin
+						enable_pc_sram		<=	`SramDisable;
+						address_read_base	<=	data_pc_in;
+					end
+		ENA_CONV 	:begin
+						address_write_base 	<=	data_pc_in;
+						enable_controller 	<=	`UnitEnable;
+					end
+		//	pooler
+		WAIT_FIV 	:begin
+						enable_pc_sram 		<=	`SramDisable;
+					end
+		ENA_POOL 	:begin
+						size_kernel 		<=	data_pc_in[15:8];
+						number_pc_line 		<=	data_pc_in[7:0];
+						enable_pooler   	<=	`UnitEnable;
+					end
+		//	wait
+		WAIT		:begin
+						enable_pc_sram		<=	`SramDisable;
+						enable_controller 	<=	`UnitDisable;
+						enable_pooler  		<=	`UnitDisable;
+					end
+		UNIT_PRE 	:begin
+						enable_pc_sram		<=	`SramDisable;
+						wea_pc_sram			<=	`SramRead;
+						address_pc_sram		<=	16'hffff;
+						model_saveunit 		<= 	1'b0;
+						enable_controller 	<=	`UnitDisable;
+						enable_pooler 		<=	`UnitDisable;
+					end
+		endcase
+	end
 end
 
 endmodule

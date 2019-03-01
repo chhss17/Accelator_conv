@@ -34,3 +34,6 @@
 
 `define 	UnitEnable 			1'b1
 `define 	UnitDisable 		1'b0
+
+`define 	EightBInit 			8'h00
+`define 	SixteenBInit		16'h0000

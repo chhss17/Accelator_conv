@@ -167,18 +167,18 @@ begin
 		wea_kernel_sram 			<=	`SramRead;
 		enable_kernel_sram 			<=	`SramDisable;
 
-		address_act 				<=	16'h0000;
+		address_act 				<=	`SixteenBInit;
 		wea_act_sram 				<=	`SramRead;
 		enable_act_sram 			<=	`SramDisable;
 
-		row 						<=	8'h00;
-		column 						<=	8'h00;
+		row 						<=	`EightBInit;
+		column 						<=	`EightBInit;
 
 		enable_pe_array				<= 	1'b0;
 		endsignal 					<=	`UnFinish;
 
-		count 						<=	16'h0000;
-		count_act 					<=	16'h0000;
+		count 						<=	`SixteenBInit;
+		count_act 					<=	`SixteenBInit;
 	end
 	else begin
 		case(state)
@@ -202,7 +202,7 @@ begin
 							enable_kernel_sram		<=	`SramDisable;
 							//	act
 							//	address_act
-							if(count_act ==	16'h0000)	begin
+							if(count_act ==	`SixteenBInit)	begin
 								address_act 		<=	address_read_base + row + column *size_act;
 							end
 							else begin
@@ -222,12 +222,12 @@ begin
 							//	act
 							enable_act_sram			<=	`SramDisable;
 							enable_pe_array 		<=	`SramDisable;
-							count 					<=	16'h0000;
-							count_act				<=	8'h00;
+							count 					<=	`SixteenBInit;
+							count_act				<=	`EightBInit;
 						end
 
 		READ_ACT_TWO 	:begin
-							if(count_act == 16'h0000)	begin
+							if(count_act == `SixteenBInit)	begin
 								address_act 		<=	address_read_base + row + column*size_act;
 							end
 							else begin
@@ -250,7 +250,7 @@ begin
 							enable_act_sram			<=	1'b0;
 							count 					<=	16'h00;
 							count_act				<=	16'h00;
-							if(column == 8'h00)	begin
+							if(column == `EightBInit)	begin
 								row 				<= row + stride;
 							end
 						end
@@ -265,8 +265,8 @@ begin
 
 		UNIT_PRE 		:begin
 							endsignal 				<=	1'b0;
-							row 					<= 	8'h00;
-							column					<= 	8'h00;
+							row 					<= 	`EightBInit;
+							column					<= 	`EightBInit;
 							enable_act_sram			<=	1'b0;
 							enable_kernel_sram		<=	1'b0;
 						end
