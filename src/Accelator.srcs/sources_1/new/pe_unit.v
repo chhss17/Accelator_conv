@@ -70,14 +70,13 @@ begin
 	if(!rst_n)	begin
 		reg_psum_in 			<= 8'h00;
 		end_signal 				<= `UnFinish;
+		psum_out 				<= 32'h00000000;
 	end
 	else begin
 		case(state)
 		2'b00	:begin
 					reg_psum_in <= psum_in;
 					end_signal	<= `UnFinish;
-					psum_out 	<= 32'h00000000;
-					
 				end
 		2'b01 	:begin
 					psum_out 	<= $signed(kernel)*$signed(act);

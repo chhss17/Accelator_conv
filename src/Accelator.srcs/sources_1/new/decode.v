@@ -41,28 +41,32 @@ module decode(
 	output	reg		[15:0]	address_write_base,
 
 	output 	reg 			model_saveunit,
+	output 	reg 	[7:0]	model_size_pe,
 
 	output	reg 			enable_controller,
-	output	reg				enable_pooler
+	output	reg				enable_pooler,
+	output 	reg 			enable_fc,
+	output 	reg 			enable_relu
     );
 
-reg					[3:0]		state;
-reg 				[3:0]		next_state;
+reg					[7:0]		state;
+reg 				[7:0]		next_state;
 reg					[3:0]		model;
 
-localparam			[3:0]	
-		READ_ONE 		= 4'b0000,
-		WAIT_ONE 		= 4'b0001,
-		JUDGE 			= 4'b0010,
-		READ_TWO 		= 4'b0011,
-		READ_THR 		= 4'b0100,
-		READ_FOU 		= 4'b0101,
-		WAIT_TWO 		= 4'b0110,
-		ENA_CONV 		= 4'b0111,
-		WAIT_FIV 		= 4'b1000,
-		ENA_POOL 		= 4'b1001,
-		WAIT			= 4'b1110,
-		UNIT_PRE		= 4'b1111;
+localparam			[7:0]	
+		READ_ONE 		= 8'b00000000,
+		WAIT_ONE 		= 8'b00000001,
+		JUDGE 			= 8'b00000010,
+		READ_TWO 		= 8'b00000011,
+		READ_THR 		= 8'b00000100,
+		READ_FOU 		= 8'b00000101,
+		WAIT_TWO 		= 8'b00000110,
+		ENA_CONV 		= 8'b00000111,
+		WAIT_FIV 		= 8'b00001000,
+		ENA_POOL 		= 8'b00001001,
+		WAIT			= 8'b00001110,
+		RELU 			= 8'b00010111,
+		UNIT_PRE		= 8'b00001111;
 
 always@(negedge rst_n or posedge clk)
 begin
@@ -99,6 +103,9 @@ begin
 					if(model ==	4'hf)	begin
 						next_state	=	WAIT;
 					end
+					else if(model == 4'h4) begin
+						next_state 	=	RELU;
+					end
 					else begin
 						next_state	=	READ_TWO;
 					end
@@ -106,7 +113,7 @@ begin
 
 	//	conv
 	READ_TWO	:begin
-					if(model == 4'h1)	begin
+					if(model == 4'h1 || model == 4'h3)	begin
 						next_state	=	READ_THR;
 					end
 					else begin
@@ -134,6 +141,11 @@ begin
 					next_state 		=	WAIT;
 				end
 
+	//	relu
+	RELU 		:begin
+					next_state 		=	WAIT;
+				end
+
 	//	wait
 	WAIT 		:begin
 					if(enable)	begin
@@ -155,8 +167,11 @@ begin
 		size_kernel 		<=	`EightBInit;
 		size_act 			<=	`EightBInit;
 		model_saveunit 		<= 	1'b0;
+		model_size_pe 		<=	`EightBInit;
 		enable_controller 	<=	`UnitDisable;
 		enable_pooler 		<=	`UnitDisable;
+		enable_fc 			<=	`UnitDisable;
+		enable_relu 		<=	`UnitDisable;
 	end
 	else begin
 	case(state)
@@ -171,7 +186,7 @@ begin
 		//	conv
 		JUDGE 		:begin
 						enable_pc_sram 		<=	`SramDisable;
-						
+						size_act			<=	data_pc_in[7:0];
 					end
 		READ_TWO	:begin
 						enable_pc_sram		<=	`SramEnable;
@@ -190,16 +205,36 @@ begin
 						wea_pc_sram			<=	`SramRead;
 						address_pc_sram		<=	address_pc_sram	+ 1;
 						size_kernel			<=	data_pc_in[15:8];
-						number_pc_line 		<=	data_pc_in[7:4];
-						stride 				<=	data_pc_in[3:0];
+						if(model == 4'h1)	begin
+							number_pc_line 	<=	data_pc_in[7:4];
+							stride 			<=	data_pc_in[3:0];
+						end
+						else if(model == 4'h3)	begin
+							number_pc_line 	<=	data_pc_in[7:0];
+							stride 			<=	8'h00;
+						end
+						
 					end
 		WAIT_TWO 	:begin
 						enable_pc_sram		<=	`SramDisable;
 						address_read_base	<=	data_pc_in;
+						if(model ==	4'h1)	begin
+							model_size_pe 		<=	size_kernel*size_kernel;
+						end
+						else begin
+							model_size_pe 		<=	size_kernel;
+						end
+						
 					end
 		ENA_CONV 	:begin
 						address_write_base 	<=	data_pc_in;
-						enable_controller 	<=	`UnitEnable;
+						if(model ==	4'h1)	begin
+							enable_controller 	<=	`UnitEnable;
+						end
+						else begin
+							enable_fc 			<=	`UnitEnable;
+						end
+						
 					end
 		//	pooler
 		WAIT_FIV 	:begin
@@ -210,10 +245,17 @@ begin
 						number_pc_line 		<=	data_pc_in[7:0];
 						enable_pooler   	<=	`UnitEnable;
 					end
+		//	relu
+		RELU 		:begin
+						enable_relu 		<=	`UnitEnable;
+					end
+
 		//	wait
 		WAIT		:begin
 						enable_pc_sram		<=	`SramDisable;
 						enable_controller 	<=	`UnitDisable;
+						enable_fc 			<=	`UnitDisable;
+						enable_relu 		<=	`UnitDisable;
 						enable_pooler  		<=	`UnitDisable;
 					end
 		UNIT_PRE 	:begin
@@ -221,8 +263,11 @@ begin
 						wea_pc_sram			<=	`SramRead;
 						address_pc_sram		<=	16'hffff;
 						model_saveunit 		<= 	1'b0;
+						model_size_pe 		<=	`EightBInit;
 						enable_controller 	<=	`UnitDisable;
 						enable_pooler 		<=	`UnitDisable;
+						enable_fc 			<=	`UnitDisable;
+						enable_relu 		<=	`UnitDisable;
 					end
 		endcase
 	end
