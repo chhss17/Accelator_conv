@@ -49,26 +49,26 @@ end
 always@(*)
 begin
 	next_state 				=	state;
-	if(state == 2'b00) begin
-		if (!enable) begin
-			next_state 		= 2'b00;
-		end
-		else begin
-			next_state 		= 2'b01;
-		end
-	end
-	else if(state == 2'b01) begin
-		next_state 			= 2'b10;
-	end
-	else begin
-		next_state 			= 2'b00;
-	end
+	case(state)
+	2'b00 		:begin
+					if (!enable) begin
+						next_state 		=	2'b00;
+					end
+					else begin
+						next_state 		=	2'b01;
+					end
+				end
+
+	2'b01 		:begin
+					next_state 			=	2'b00;
+				end
+	endcase
 end
 
 always@(posedge clk or negedge rst_n)
 begin
 	if(!rst_n)	begin
-		reg_psum_in 			<= 8'h00;
+		reg_psum_in 			<= 32'h00000000;
 		end_signal 				<= `UnFinish;
 		psum_out 				<= 32'h00000000;
 	end
@@ -79,11 +79,7 @@ begin
 					end_signal	<= `UnFinish;
 				end
 		2'b01 	:begin
-					psum_out 	<= $signed(kernel)*$signed(act);
-					end_signal 	<= `UnFinish;
-				end
-		2'b10 	:begin
-					psum_out 	<= $signed(psum_out) + $signed(reg_psum_in);
+					psum_out 	<= $signed(kernel)*$signed(act) + $signed(reg_psum_in);
 					end_signal 	<= `Finish;
 				end
 		endcase

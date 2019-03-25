@@ -25,12 +25,7 @@ module pe_array(
 	input 					rst_n,
 	input 					enable,
 
-	input 					enable_1,
-	input 					enable_2,
-	input 					enable_3,
-	input 					enable_4,
-	input 					enable_5,
-	input 					enable_6,
+	input 			[5:0]	enable_pc_line,
 
 	input			[399:0]	kernel_1,
 	input			[399:0]	kernel_2,
@@ -137,7 +132,7 @@ wire						end_signal_6_13,end_signal_6_14,end_signal_6_15,end_signal_6_16;
 wire						end_signal_6_17,end_signal_6_18,end_signal_6_19,end_signal_6_20;
 wire						end_signal_6_21,end_signal_6_22,end_signal_6_23,end_signal_6_24,end_signal_6_25;
 
-pe_unit U1_1 (clk,rst_n,(enable&enable_1),kernel_1[15:0]	,act[15:0]		,psum_in_1	,end_signal_1_1 	,out_1_1 );
+pe_unit U1_1 (clk,rst_n,(enable&enable_pc_line[0]),kernel_1[15:0]	,act[15:0]		,psum_in_1	,end_signal_1_1 	,out_1_1 );
 pe_unit U1_2 (clk,rst_n,end_signal_1_1 	,kernel_1[31:16]	,act[31:16] 	,out_1_1	,end_signal_1_2 	,out_1_2 );
 pe_unit U1_3 (clk,rst_n,end_signal_1_2 	,kernel_1[47:32]	,act[47:32]		,out_1_2	,end_signal_1_3 	,out_1_3 );
 pe_unit U1_4 (clk,rst_n,end_signal_1_3 	,kernel_1[63:48]	,act[63:48]		,out_1_3 	,end_signal_1_4 	,out_1_4 );
@@ -163,7 +158,7 @@ pe_unit U1_23(clk,rst_n,end_signal_1_22 ,kernel_1[367:352]	,act[367:352]	,out_1_
 pe_unit U1_24(clk,rst_n,end_signal_1_23 ,kernel_1[383:368]	,act[383:368]	,out_1_23	,end_signal_1_24 	,out_1_24);
 pe_unit U1_25(clk,rst_n,end_signal_1_24 ,kernel_1[399:384]	,act[399:384]	,out_1_24	,end_signal_1_25 	,out_1_25);
 
-pe_unit U2_1 (clk,rst_n,(enable_2&end_signal_1_1),kernel_2[15:0]	,act[15:0]	,psum_in_2	,end_signal_2_1 	,out_2_1 );
+pe_unit U2_1 (clk,rst_n,(enable_pc_line[1]&end_signal_1_1),kernel_2[15:0]	,act[15:0]	,psum_in_2	,end_signal_2_1 	,out_2_1 );
 pe_unit U2_2 (clk,rst_n,end_signal_2_1 	,kernel_2[31:16]	,act[31:16]		,out_2_1	,end_signal_2_2 	,out_2_2 );
 pe_unit U2_3 (clk,rst_n,end_signal_2_2 	,kernel_2[47:32]	,act[47:32]		,out_2_2	,end_signal_2_3 	,out_2_3 );
 pe_unit U2_4 (clk,rst_n,end_signal_2_3 	,kernel_2[63:48]	,act[63:48]		,out_2_3 	,end_signal_2_4 	,out_2_4 );
@@ -189,7 +184,7 @@ pe_unit U2_23(clk,rst_n,end_signal_2_22 ,kernel_2[367:352]	,act[367:352]	,out_2_
 pe_unit U2_24(clk,rst_n,end_signal_2_23 ,kernel_2[383:368]	,act[383:368]	,out_2_23	,end_signal_2_24 	,out_2_24);
 pe_unit U2_25(clk,rst_n,end_signal_2_24 ,kernel_2[399:384]	,act[399:384]	,out_2_24	,end_signal_2_25 	,out_2_25);
 
-pe_unit U3_1 (clk,rst_n,(enable_3&end_signal_2_1),kernel_3[15:0]	,act[15:0]	,psum_in_3	,end_signal_3_1 	,out_3_1 );
+pe_unit U3_1 (clk,rst_n,(enable_pc_line[2]&end_signal_2_1),kernel_3[15:0]	,act[15:0]	,psum_in_3	,end_signal_3_1 	,out_3_1 );
 pe_unit U3_2 (clk,rst_n,end_signal_3_1 	,kernel_3[31:16]	,act[31:16]		,out_3_1	,end_signal_3_2 	,out_3_2 );
 pe_unit U3_3 (clk,rst_n,end_signal_3_2 	,kernel_3[47:32]	,act[47:32]		,out_3_2	,end_signal_3_3 	,out_3_3 );
 pe_unit U3_4 (clk,rst_n,end_signal_3_3 	,kernel_3[63:48]	,act[63:48]		,out_3_3 	,end_signal_3_4 	,out_3_4 );
@@ -215,7 +210,7 @@ pe_unit U3_23(clk,rst_n,end_signal_3_22 ,kernel_3[367:352]	,act[367:352]	,out_3_
 pe_unit U3_24(clk,rst_n,end_signal_3_23 ,kernel_3[383:368]	,act[383:368]	,out_3_23	,end_signal_3_24 	,out_3_24);
 pe_unit U3_25(clk,rst_n,end_signal_3_24 ,kernel_3[399:384]	,act[399:384]	,out_3_24	,end_signal_3_25 	,out_3_25);
 
-pe_unit U4_1 (clk,rst_n,(enable_4&end_signal_3_1),kernel_4[15:0]	,act[15:0]	,psum_in_4	,end_signal_4_1 	,out_4_1 );
+pe_unit U4_1 (clk,rst_n,(enable_pc_line[3]&end_signal_3_1),kernel_4[15:0]	,act[15:0]	,psum_in_4	,end_signal_4_1 	,out_4_1 );
 pe_unit U4_2 (clk,rst_n,end_signal_4_1 	,kernel_4[31:16]	,act[31:16]		,out_4_1	,end_signal_4_2 	,out_4_2 );
 pe_unit U4_3 (clk,rst_n,end_signal_4_2 	,kernel_4[47:32]	,act[47:32]		,out_4_2	,end_signal_4_3 	,out_4_3 );
 pe_unit U4_4 (clk,rst_n,end_signal_4_3 	,kernel_4[63:48]	,act[63:48]		,out_4_3 	,end_signal_4_4 	,out_4_4 );
@@ -241,7 +236,7 @@ pe_unit U4_23(clk,rst_n,end_signal_4_22 ,kernel_4[367:352]	,act[367:352]	,out_4_
 pe_unit U4_24(clk,rst_n,end_signal_4_23 ,kernel_4[383:368]	,act[383:368]	,out_4_23	,end_signal_4_24 	,out_4_24);
 pe_unit U4_25(clk,rst_n,end_signal_4_24 ,kernel_4[399:384]	,act[399:384]	,out_4_24	,end_signal_4_25 	,out_4_25);
 
-pe_unit U5_1 (clk,rst_n,(enable_5&end_signal_4_1),kernel_5[15:0]	,act[15:0]	,psum_in_5	,end_signal_5_1 	,out_5_1 );
+pe_unit U5_1 (clk,rst_n,(enable_pc_line[4]&end_signal_4_1),kernel_5[15:0]	,act[15:0]	,psum_in_5	,end_signal_5_1 	,out_5_1 );
 pe_unit U5_2 (clk,rst_n,end_signal_5_1 	,kernel_5[31:16]	,act[31:16]		,out_5_1	,end_signal_5_2 	,out_5_2 );
 pe_unit U5_3 (clk,rst_n,end_signal_5_2 	,kernel_5[47:32]	,act[47:32]		,out_5_2	,end_signal_5_3 	,out_5_3 );
 pe_unit U5_4 (clk,rst_n,end_signal_5_3 	,kernel_5[63:48]	,act[63:48]		,out_5_3 	,end_signal_5_4 	,out_5_4 );
@@ -267,7 +262,7 @@ pe_unit U5_23(clk,rst_n,end_signal_5_22 ,kernel_5[367:352]	,act[367:352]	,out_5_
 pe_unit U5_24(clk,rst_n,end_signal_5_23 ,kernel_5[383:368]	,act[383:368]	,out_5_23	,end_signal_5_24 	,out_5_24);
 pe_unit U5_25(clk,rst_n,end_signal_5_24 ,kernel_5[399:384]	,act[399:384]	,out_5_24	,end_signal_5_25 	,out_5_25);
 
-pe_unit U6_1 (clk,rst_n,(enable_6&end_signal_5_1),kernel_6[15:0]	,act[15:0]	,psum_in_6	,end_signal_6_1 	,out_6_1 );
+pe_unit U6_1 (clk,rst_n,(enable_pc_line[5]&end_signal_5_1),kernel_6[15:0]	,act[15:0]	,psum_in_6	,end_signal_6_1 	,out_6_1 );
 pe_unit U6_2 (clk,rst_n,end_signal_6_1 	,kernel_6[31:16]	,act[31:16]		,out_6_1	,end_signal_6_2 	,out_6_2 );
 pe_unit U6_3 (clk,rst_n,end_signal_6_2 	,kernel_6[47:32]	,act[47:32]		,out_6_2	,end_signal_6_3 	,out_6_3 );
 pe_unit U6_4 (clk,rst_n,end_signal_6_3 	,kernel_6[63:48]	,act[63:48]		,out_6_3 	,end_signal_6_4 	,out_6_4 );

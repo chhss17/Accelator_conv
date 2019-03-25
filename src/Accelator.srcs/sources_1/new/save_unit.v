@@ -64,7 +64,6 @@ reg  				[7:0]	column;
 localparam			[3:0]	
 		WAIT 				= 4'b0000,
 		REC_ENA			 	= 4'b0001,
-		REC_ONE 		 	= 4'b0010,
 		REC_TWO 		 	= 4'b0011,
 		WAIT_ONE 			= 4'b0100,
 		ADDRESS 		 	= 4'b0110,
@@ -104,12 +103,9 @@ begin
 				end
 	// 			REC_ENA	input data
 	REC_ENA 	:begin
-					next_state		= 	REC_ONE;
+					next_state		= 	REC_TWO;
 				end
-	// 			REC_ONE	wait
-	REC_ONE		:begin
-					next_state 		= 	REC_TWO;
-				end
+
 	//			REC_TWO  wait
 	REC_TWO 	:begin
 					if(`IsEnable(enable))	begin
@@ -205,9 +201,7 @@ begin
 							data_out				<=	16'h0000;
 							reg_size_feature_map	<=	size_act - size_kernel + 1;
 							count 					<=	count + 1;
-						end
-		REC_ONE 		:begin
-							address_init[count - 1]	<=	address_write_base + (count - 1)*reg_size_feature_map*reg_size_feature_map;
+							address_init[count]		<=	address_write_base + (count)*reg_size_feature_map*reg_size_feature_map;
 						end
 
 		WAIT_ONE 		:begin

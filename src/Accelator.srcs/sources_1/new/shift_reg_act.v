@@ -32,6 +32,8 @@ module shift_reg_act(
 reg                         state;
 reg                         next_state;
 
+reg  				[15:0]	reg_datain;
+
 always@(posedge clk or negedge rst_n)
 begin
 	if(rst_n == 1'b0)	begin
@@ -61,10 +63,12 @@ begin
 	else begin
 		case(state)
 		1'b0 	:begin
-					result 	<=	result;
+					result 		<=	result;
+					// reg_datain	<= 	input_data;
 				end
 		1'b1 	:begin
-					result 	<=	{result[383:0],input_data};
+					result 		<=	{result[383:0],input_data};
+					// reg_datain	<= 	input_data;
 				end
 		endcase
 	end
