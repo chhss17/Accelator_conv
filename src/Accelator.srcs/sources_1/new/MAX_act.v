@@ -37,6 +37,10 @@ module MAX_act(
 	input 					wea_4,
 	input 			[15:0]	data_in_4,
 	input 			[15:0]	address_4,
+	input 					enable_5,
+	input 					wea_5,
+	input 			[15:0]	data_in_5,
+	input 			[15:0]	address_5,
 
 	output 	wire			enable,
 	output 	wire 			wea,
@@ -44,8 +48,8 @@ module MAX_act(
 	output 	wire 	[15:0]	address
     );
 
-assign enable 	= (enable_1 == 1'b1)?enable_1	:(enable_2 == 1'b1)?enable_2	:(enable_3 == 1'b1)?enable_3	:(enable_4 == 1'b1)?enable_4 	:1'b0;
-assign wea 		= (enable_1 == 1'b1)?wea_1		:(enable_2 == 1'b1)?wea_2		:(enable_3 == 1'b1)?wea_3		:(enable_4 == 1'b1)?wea_4		:1'b0;
-assign data_in 	= (enable_1 == 1'b1)?data_in_1	:(enable_2 == 1'b1)?data_in_2	:(enable_3 == 1'b1)?data_in_3	:(enable_4 == 1'b1)?data_in_4	:16'h0000;
-assign address 	= (enable_1 == 1'b1)?address_1	:(enable_2 == 1'b1)?address_2	:(enable_3 == 1'b1)?address_3	:(enable_4 == 1'b1)?address_4	:16'h0000;
+assign enable 	= (enable_1 == 1'b1)?enable_1	:(enable_2 == 1'b1)?enable_2	:(enable_3 == 1'b1)?enable_3	:(enable_4 == 1'b1)?enable_4 	:(enable_5 == 1'b1)?enable_5	:1'b0;
+assign wea 		= (enable_1 == 1'b1)?wea_1		:(enable_2 == 1'b1)?wea_2		:(enable_3 == 1'b1)?wea_3		:(enable_4 == 1'b1)?wea_4		:(enable_5 == 1'b1)?wea_5	 	:1'b0;
+assign data_in 	= (enable_1 == 1'b1)?data_in_1	:(enable_2 == 1'b1)?data_in_2	:(enable_3 == 1'b1)?data_in_3	:(enable_4 == 1'b1)?data_in_4	:(enable_5 == 1'b1)?data_in_5	:16'h0000;
+assign address 	= (enable_1 == 1'b1)?address_1	:(enable_2 == 1'b1)?address_2	:(enable_3 == 1'b1)?address_3	:(enable_4 == 1'b1)?address_4	:(enable_4 == 1'b1)?address_5	:16'h0000;
 endmodule

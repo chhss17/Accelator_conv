@@ -46,27 +46,24 @@ module controller(
 	output 	reg 			endsignal
     );
 
-reg 				[3:0]	state;
-reg 				[3:0]	next_state;
+reg 				[7:0]	state;
+reg 				[7:0]	next_state;
 reg 				[15:0]	count;
 reg 				[15:0]	count_act;
 
 reg					[7:0]	row;
 reg					[7:0]	column;
 
-localparam 					ENABLE_EN = 1'b1;
-localparam 					ENABLE_UN = 1'b0;
-
-localparam			[3:0]	
-				READ_KER 				= 4'b0000,
-				READ_ACT_ONE 			= 4'b0001,
-				CACULATE 				= 4'b0010,
-				READ_ACT_TWO 			= 4'b0011,
-				WAIT_ONE 				= 4'b0100,
-				WAIT_TWO 				= 4'b0101,
-				WAIT_THR 				= 4'b0110,
-				FINISH 					= 4'b0111,
-				UNIT_PRE				= 4'b1111;
+localparam			[7:0]	
+				READ_KER 				= 8'b00000000,
+				READ_ACT_ONE 			= 8'b00000001,
+				CACULATE 				= 8'b00000010,
+				READ_ACT_TWO 			= 8'b00000011,
+				WAIT_ONE 				= 8'b00000100,
+				WAIT_TWO 				= 8'b00000101,
+				WAIT_THR 				= 8'b00000110,
+				FINISH 					= 8'b00000111,
+				UNIT_PRE				= 8'b00001111;
 
 always@(negedge rst_n or posedge clk)
 begin

@@ -25,22 +25,21 @@ module decode_sram(
 	input 				rst_n,
 	input 				enable,
 
-	input 		[1:0]	mode,
+	input 		[1:0]	cs,
 	input 				ena,
 	input 				wea,
 	input 		[15:0]	data_in,
 	input 		[16:0]	address,
 
+	output 		[16:0]	data_out,
 	output 				end_mode
     );
-//	pc_paramater
-wire 		[15:0]		wire_pc_sram_to_decode;
-
+reg 					reg_rst_n;
 
 //	decode
-wire 					wire_enable_pc_sram;
-wire 					wire_wea_pc_sram;
-wire 		[15:0]		wire_address_pc_sram;
+wire 					wire_enable_decode_to_pc_sram;
+wire 					wire_wea_decode_to_pc_sram;
+wire 		[15:0]		wire_address_decode_to_pc_sram;
 wire 		[7:0]		wire_size_act;
 wire 		[7:0]		wire_size_kernel;
 wire 		[7:0]		wire_stride;
@@ -64,6 +63,13 @@ wire 					wire_wea_controller_to_kernel_sram;
 wire 					wire_enable_controller_pe_array;
 wire 					wire_endsignal_contorller;
 
+//	pc_paramater
+wire 					wire_enable_pc_sram;
+wire 					wire_wea_pc_sram;
+wire 		[15:0]		wire_datain_pc_sram;
+wire 		[15:0]		wire_address_pc_sram;
+wire 		[15:0]		wire_dataout_pc_sram;
+
 //	act sram
 wire 					wire_enable_act_sram;
 wire 					wire_wea_act_sram;
@@ -86,7 +92,6 @@ wire 		[15:0]		wire_address_kernel_sram;
 wire 		[15:0]		wire_dataout_kernel_sram;
 
 //	kernerl shiftreg
-// wire 		[2495:0]	wire_kernel_shift_reg_data_out;
 wire 					wire_enable_kernel_shiftreg_1;
 wire 					wire_enable_kernel_shiftreg_2;
 wire 					wire_enable_kernel_shiftreg_3;
@@ -155,6 +160,10 @@ wire 					wire_wea_relu_to_act_sram;
 wire 		[15:0]		wire_datain_relu_to_act_sram;
 wire 					wire_endsignal_relu;
 
+//	max_input
+wire 					wire_enable_input_to_kernel_sram;
+wire 					wire_enable_input_to_act_sram;
+wire 					wire_enable_input_to_pc_sram;
 
 //	not important parameter
 reg 		[15:0]		reg_datain_pc_sram;
@@ -176,12 +185,14 @@ begin
 		reg_datain_act_sram				<=	16'h00;
 		reg_datain_kernel_sram			<=	16'h00;
 		reg_datain_output_sram			<=	16'h00;
+		reg_rst_n 						<=	1'b0;
 	end
 	else begin
-		reg_dataout_kernel_sram 			<=		wire_dataout_kernel_sram;
+		reg_dataout_kernel_sram 		<=	wire_dataout_kernel_sram;
 
-		reg_pe_array_psum_in_0 				<=		16'h0000;
-		reg_pe_array_psum_in_1 				<=		16'hffff;
+		reg_pe_array_psum_in_0 			<=	16'h0000;
+		reg_pe_array_psum_in_1 			<=	16'hffff;
+		reg_rst_n 						<=	rst_n;
 	end
 end
 
@@ -191,11 +202,11 @@ decode 	u_decode(
 	.clk 				(clk),
 	.rst_n 				(rst_n),
 	.enable				((enable||wire_endsignal_contorller||wire_endsignal_pooler||wire_endsignal_fc||wire_endsignal_relu)),
-	.data_pc_in 		(wire_pc_sram_to_decode),
+	.data_pc_in 		(wire_dataout_pc_sram),
 
-	.enable_pc_sram 	(wire_enable_pc_sram),
-	.wea_pc_sram 		(wire_wea_pc_sram),
-	.address_pc_sram	(wire_address_pc_sram),
+	.enable_pc_sram 	(wire_enable_decode_to_pc_sram),
+	.wea_pc_sram 		(wire_wea_decode_to_pc_sram),
+	.address_pc_sram	(wire_address_decode_to_pc_sram),
 
 	.size_act 			(wire_size_act),
 	.size_kernel 		(wire_size_kernel),
@@ -220,7 +231,7 @@ decode 	u_decode(
 //	controller
 controller 	u_controller(
 	.clk 					(clk),
-	.rst_n					(rst_n),
+	.rst_n					(reg_rst_n&(!end_mode)),
 
 	.enable 				(wire_enable_controller),
 	.endsignal_saveunit 	(wire_endsignal_saveunit),
@@ -245,7 +256,7 @@ controller 	u_controller(
 //	pooler
 pooler_controller 	u_pooler_controller(
 	.clk 					(clk),
-	.rst_n 					(rst_n),
+	.rst_n					(reg_rst_n&(!end_mode)),
 	.enable 				(wire_enable_pooler),
 
 	.size_act 				(wire_size_act),
@@ -267,7 +278,7 @@ pooler_controller 	u_pooler_controller(
 //	full connect
 fc 	u_fc(
 	.clk 						(clk),
-	.rst_n 						(rst_n),
+	.rst_n						(reg_rst_n&(!end_mode)),
 	.enable 					(wire_enable_fc),
 	.endsignal_saveunit 		(wire_endsignal_saveunit),
 
@@ -290,7 +301,7 @@ fc 	u_fc(
 //	relu
 RE 	u_relu(
 	.clk 						(clk),
-	.rst_n 						(rst_n),
+	.rst_n						(reg_rst_n&(!end_mode)),
 	.enable 					(wire_enable_relu),
 	.size_act 					(wire_size_act),
 	.data_in 					(wire_dataout_output_sram),
@@ -308,7 +319,7 @@ RE 	u_relu(
 
 MODE_SHIFTREG 	u_kernel_model(
 	.clk 					(clk),
-	.rst_n 					(rst_n),
+	.rst_n					(reg_rst_n&(!end_mode)),
 	.size_act 				(wire_model_size_pe),
 	.enable 				(wire_enable_kernel_sram),
 	.enable_1 				(wire_enable_kernel_shiftreg_1),
@@ -320,49 +331,49 @@ MODE_SHIFTREG 	u_kernel_model(
 
 demo_shift_reg 	u_kernel_shift_reg_1(
 	.clk					(clk),
-	.rst_n 					(rst_n),
+	.rst_n					(reg_rst_n&(!end_mode)),
 	.enable 				(wire_enable_kernel_shiftreg_1),
 	.input_data				(reg_dataout_kernel_sram),
 	.result					(wire_kernel_shift_reg_data_out_1));
 
 demo_shift_reg 	u_kernel_shift_reg_2(
 	.clk					(clk),
-	.rst_n 					(rst_n),
+	.rst_n					(reg_rst_n&(!end_mode)),
 	.enable 				(wire_enable_kernel_shiftreg_2),
 	.input_data				(reg_dataout_kernel_sram),
 	.result					(wire_kernel_shift_reg_data_out_2));
 
 demo_shift_reg 	u_kernel_shift_reg_3(
 	.clk					(clk),
-	.rst_n 					(rst_n),
+	.rst_n					(reg_rst_n&(!end_mode)),
 	.enable 				(wire_enable_kernel_shiftreg_3),
 	.input_data				(reg_dataout_kernel_sram),
 	.result					(wire_kernel_shift_reg_data_out_3));
 
 demo_shift_reg 	u_kernel_shift_reg_4(
 	.clk					(clk),
-	.rst_n 					(rst_n),
+	.rst_n					(reg_rst_n&(!end_mode)),
 	.enable 				(wire_enable_kernel_shiftreg_4),
 	.input_data				(reg_dataout_kernel_sram),
 	.result					(wire_kernel_shift_reg_data_out_4));
 
 demo_shift_reg 	u_kernel_shift_reg_5(
 	.clk					(clk),
-	.rst_n 					(rst_n),
+	.rst_n					(reg_rst_n&(!end_mode)),
 	.enable 				(wire_enable_kernel_shiftreg_5),
 	.input_data				(reg_dataout_kernel_sram),
 	.result					(wire_kernel_shift_reg_data_out_5));
 
 demo_shift_reg 	u_kernel_shift_reg_6(
 	.clk					(clk),
-	.rst_n 					(rst_n),
+	.rst_n					(reg_rst_n&(!end_mode)),
 	.enable 				(wire_enable_kernel_shiftreg_6),
 	.input_data				(reg_dataout_kernel_sram),
 	.result					(wire_kernel_shift_reg_data_out_6));
 
 shift_reg_act	u_act_shift_reg(
 	.clk					(clk),
-	.rst_n 					(rst_n),
+	.rst_n					(reg_rst_n&(!end_mode)),
 	.enable 				(wire_enable_act_sram),
 	.input_data				(wire_dataout_act_sram),
 	.result					(wire_act_shift_reg_data_out));
@@ -375,7 +386,7 @@ MAX_pe_line 	u_max_pe_line(
 //	pe array
 pe_array 	u_pe_array(
 	.clk					(clk),
-	.rst_n					(rst_n),
+	.rst_n					(reg_rst_n&(!end_mode)),
 	.enable 				(wire_enable_controller_pe_array||wire_enable_fc_to_pe_array),
 	.enable_pc_line			(wire_enable_pe_line),
 	.kernel_1 				(wire_kernel_shift_reg_data_out_1[415:16]),
@@ -409,7 +420,7 @@ pe_array 	u_pe_array(
 //	save unit
 save_unit	u_save_unit(
 	.clk 					(clk),
-	.rst_n 					(rst_n),
+	.rst_n					(reg_rst_n&(!end_mode)),
 	.size_act 				(wire_size_act),
 	.size_kernel 			(wire_size_kernel),
 	.address_write_base 	(wire_address_write_base),
@@ -454,8 +465,8 @@ parameter_sram 	u_parameter_sram(
 	.ena 					(wire_enable_pc_sram),
 	.wea 					(wire_wea_pc_sram),
 	.addra 					(wire_address_pc_sram),
-	.dina 					(reg_datain_pc_sram),
-	.douta 					(wire_pc_sram_to_decode));
+	.dina 					(wire_datain_pc_sram),
+	.douta 					(wire_dataout_pc_sram));
 
 //	act sram
 blk_mem_act_gen	u_act_sram(
@@ -466,8 +477,16 @@ blk_mem_act_gen	u_act_sram(
 	.dina					(wire_datain_act_sram),
 	.douta					(wire_dataout_act_sram));
 
+/*******************************	MAX FOR INPUT 	*********************************/
+MAX_input 	u_max_input(
+	.ena 					(ena),
+	.cs 					(cs),
+	.ena1 					(wire_enable_input_to_pc_sram),
+	.ena2 					(wire_enable_input_to_act_sram),
+	.ena3 					(wire_enable_input_to_kernel_sram));
+
 /*******************************	MAX FOR SRAM 	*********************************/
-//	2 TO 1 for kernel sram
+//	3 TO 1 for kernel sram
 MAX_kernel 	u_max_kernel_sram(
 	//	from controller 	read
 	.enable_1				(wire_enable_controller_to_kernel_sram),
@@ -479,6 +498,11 @@ MAX_kernel 	u_max_kernel_sram(
 	.wea_2 					(wire_wea_fc_to_kernel_sram),
 	.data_in_2 				(reg_datain_kernel_sram),
 	.address_2 				(wire_address_fc_to_kernel_sram),
+	//	from input
+	.enable_3 				(wire_enable_input_to_kernel_sram),
+	.wea_3 					(wea),
+	.data_in_3 				(data_in),
+	.address_3 				(address),
 	//	to kernel sram 
 	.enable 				(wire_enable_kernel_sram),
 	.wea 					(wire_wea_kernel_sram),
@@ -508,7 +532,7 @@ MAX_output 	u_max_output_sram(
 	.data_in 				(wire_datain_output_sram),
 	.address 				(wire_address_output_sram));
 
-//	4 TO 1 for act sram
+//	5 TO 1 for act sram
 MAX_act 	u_max_act_sram(
 	//	from controller 	read
 	.enable_1				(wire_enable_controller_to_act_sram),
@@ -530,9 +554,34 @@ MAX_act 	u_max_act_sram(
 	.wea_4 					(wire_wea_relu_to_act_sram),
 	.data_in_4 				(wire_datain_relu_to_act_sram),
 	.address_4 				(wire_address_relu_to_act_sram),
+	//	from input
+	.enable_5 				(wire_enable_input_to_act_sram ),
+	.wea_5 					(wea),
+	.data_in_5 				(data_in),
+	.address_5 				(address),
 	//	to act sram
 	.enable 				(wire_enable_act_sram),
 	.wea 					(wire_wea_act_sram),
 	.data_in 				(wire_datain_act_sram),
 	.address 				(wire_address_act_sram));
+
+//	2 TO 1 for pc sram
+MAX_pc 		u_max_pc(
+	//	from decode
+	.enable_1				(wire_enable_decode_to_pc_sram),
+	.wea_1 					(wire_wea_decode_to_pc_sram),
+	.data_in_1				(reg_datain_pc_sram),
+	.address_1				(wire_address_decode_to_pc_sram),
+	//	from input
+	.enable_2				(wire_enable_input_to_pc_sram),
+	.wea_2 					(wea),
+	.data_in_2 				(data_in),
+	.address_2 				(wire_address_fc_to_kernel_sram),
+
+	//	to pc sram
+	.enable 				(wire_enable_pc_sram),
+	.wea 					(wire_wea_pc_sram),
+	.data_in 				(wire_datain_pc_sram),
+	.address 				(wire_address_pc_sram));
+
 endmodule

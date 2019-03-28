@@ -3,9 +3,9 @@
 // Company: 
 // Engineer: 
 // 
-// Create Date: 2019/01/20 12:56:28
+// Create Date: 03/28/2019 11:12:16 AM
 // Design Name: 
-// Module Name: MAX_output_sram
+// Module Name: MAX_pc
 // Project Name: 
 // Target Devices: 
 // Tool Versions: 
@@ -20,7 +20,7 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 
-module MAX_kernel(
+module MAX_pc(
 	input 					enable_1,
 	input 					wea_1,
 	input 			[15:0]	data_in_1,
@@ -29,10 +29,6 @@ module MAX_kernel(
 	input 					wea_2,
 	input 			[15:0]	data_in_2,
 	input 			[15:0]	address_2,
-	input 					enable_3,
-	input 					wea_3,
-	input 			[15:0]	data_in_3,
-	input 			[15:0]	address_3,
 
 	output 	wire			enable,
 	output 	wire 			wea,
@@ -40,9 +36,9 @@ module MAX_kernel(
 	output 	wire 	[15:0]	address
     );
 
-assign enable 	= (enable_1 == 1'b1)?enable_1	:(enable_2 == 1'b1)?enable_2	:(enable_3 == 1'b1)?enable_3	:1'b0;
-assign wea 		= (enable_1 == 1'b1)?wea_1		:(enable_2 == 1'b1)?wea_2		:(enable_3 == 1'b1)?wea_3		:1'b0;
-assign data_in 	= (enable_1 == 1'b1)?data_in_1	:(enable_2 == 1'b1)?data_in_2	:(enable_3 == 1'b1)?data_in_3	:16'h0000;
-assign address 	= (enable_1 == 1'b1)?address_1	:(enable_2 == 1'b1)?address_2	:(enable_3 == 1'b1)?address_3	:16'h0000;
+assign enable 	= (enable_1 == 1'b1)?enable_1	:(enable_2 == 1'b1)?enable_2	:1'b0;
+assign wea 		= (enable_1 == 1'b1)?wea_1		:(enable_2 == 1'b1)?wea_2		:1'b0;
+assign data_in 	= (enable_1 == 1'b1)?data_in_1	:(enable_2 == 1'b1)?data_in_2	:16'h0000;
+assign address 	= (enable_1 == 1'b1)?address_1	:(enable_2 == 1'b1)?address_2	:16'h0000;
 
 endmodule

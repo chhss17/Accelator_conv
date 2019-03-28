@@ -23,37 +23,56 @@
 module sim_decode();
 
 reg							clk;
-reg 						reset;
+reg 						rst_n;
 reg 						enable;
+
+reg 			[1:0]		cs;
+reg 						ena;
+reg 						wea;
+reg 			[15:0]		data_in;
+reg 			[15:0]		address;
+
+wire 			[15:0]		data_out;
+wire 						end_mode;
 
 initial
 begin
-	reset		=	1'b0;
+	rst_n		=	1'b1;
 	clk 		=	1'b0;
 	enable		=	1'b0;
-	#1	reset	=	1'b1;
+	cs 			=	2'b00;
+	ena 		=	1'b0;
+	wea 		=	1'b0;
+	data_in 	=	16'h0000;
+	address 	=	16'h0000;
+	#1	rst_n	=	1'b0;
 		clk 	=	1'b1;
-	#1	reset	=	1'b0;
+	#1	rst_n	=	1'b1;
 		clk  	=	1'b0;
+	#1  clk     =   1'b1;
+	#1  clk     =   1'b0;
+	#1  clk     =   1'b1;
+	    enable  =   1'b1;
+	#1  clk     =   1'b0;
 end
 
 always
 begin
+    enable  =   1'b0;
 	#10	clk	=	~clk;
 end
 
-/*
-always
-begin
-	#1000	enable	=	1'b1;
-	#10 	enable	=	1'b0;
-end
-*/
-
 decode_sram		u_decode_sram(
 	.clk 					(clk),
-	.reset 					(reset),
-	.enable 				(enable));
+	.rst_n 					(rst_n),
+	.enable 				(enable),
+	.cs 					(cs),
+	.ena 					(ena),
+	.wea					(wea),
+	.data_in 				(data_in),
+	.address 				(address),
+	.data_out 				(data_out),
+	.end_mode 				(end_mode));
 
 
 endmodule

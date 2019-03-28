@@ -151,7 +151,7 @@ begin
 
 	//	finish
 	FINISH 		:begin
-					next_state 		=	WAIT;
+					next_state 		=	UNIT_PRE;
 				end
 
 	//	wait
